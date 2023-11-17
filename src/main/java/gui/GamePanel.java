@@ -1,5 +1,6 @@
 package gui;
 
+import gamelogic.nonmoving.Wall;
 import gamelogic.pacman.PacMan;
 
 import javax.swing.*;
@@ -7,10 +8,14 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-
+/**
+ * This class is responsible for everything concerning the game.
+ */
 public class GamePanel extends JPanel {
     private final Timer timer;
     private final PacMan pacMan = new PacMan();
+
+    private Wall[][] level;
 
     public GamePanel() {
         setBackground(Color.BLACK);
@@ -40,10 +45,4 @@ public class GamePanel extends JPanel {
         super.paint(g);
         g.drawImage(pacMan.getCurrentSprite(), pacMan.getX(), pacMan.getY(), this);
     }
-
-
-
-
-
-
 }

@@ -1,77 +1,77 @@
 package gui.leveleditor;
 
-import javax.imageio.ImageIO;
+import gamelogic.nonmoving.Wall;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.*;
-import java.util.ArrayList;
 
+/**
+ * This class is responsible for displaying the level in the level editor.
+ * It is a 31*28 grid of JLabels, each of which can be clicked to change the wall sprite.
+ * The level is represented by a 2D array of Wall objects.
+ * The level can be saved to a file and loaded from a file.
+ */
 public class EditorViewPanel extends JPanel {
+    private final Wall[][] walls = new Wall[31][28];
+    private JLabel[][] wallCells = new JLabel[31][28];
 
-        private static String selectedSpritePath = "res/sprites/walls/empty.png";
-        private static ArrayList<String> levelSpritePaths = new ArrayList<>();
-        public EditorViewPanel() {
-            setLayout(new GridLayout(31, 28));
-            try {
-                for (int i = 0; i < 31 * 28; i++) {
-                    levelSpritePaths.add("res/sprites/walls/empty.png");
-                    JLabel label = new JLabel();
-                    label.setIcon(new ImageIcon(ImageIO.read(new File(selectedSpritePath))));
-                    label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                    add(label);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    JLabel label = (JLabel) getComponentAt(e.getPoint());
-                    int row = e.getPoint().y / 24;
-                    int col = e.getPoint().x / 24;
-                    levelSpritePaths.set(row * 28 + col, selectedSpritePath);
-                    try{
-                        label.setIcon(new ImageIcon(ImageIO.read(new File(selectedSpritePath))));
-                    } catch (Exception exception){
-                        exception.printStackTrace();
+    // Initialize the level editor view panel
+    public EditorViewPanel(){
+        initWalls();
+        initCells();
+        setLayout(new GridLayout(31, 28));
+        setBackground(Color.BLACK);
+    }
+    // Initialize the cells of the level editor view panel
+    private void initCells(){
+        // Create 28*31 cells for the level
+        for(int i = 0; i < 31; i++){
+            for(int j = 0; j < 28; j++){
+                wallCells[i][j] = new JLabel();
+                wallCells[i][j].setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                wallCells[i][j].setPreferredSize(new Dimension(22,22));
+                wallCells[i][j].setMinimumSize(new Dimension(22,22));
+                wallCells[i][j].setMaximumSize(new Dimension(22,22));
+                int finalI = i;
+                int finalJ = j;
+                wallCells[i][j].addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        int col = wallCells[finalI][finalJ].getX() / wallCells[finalI][finalJ].getWidth();
+                        int row = wallCells[finalI][finalJ].getY() / wallCells[finalI][finalJ].getWidth();
+                        System.out.println("row: " + row + " col: " + col);
+                        if(LevelEditorPanel.currentWallSprite != null){
+                            walls[row][col].setSprite(LevelEditorPanel.currentWallSprite);
+                            wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
+                        }
                     }
-                }
-            });
-        }
-
-        public void setSelection(String spriteName) {
-            selectedSpritePath = "res/sprites/walls/" + spriteName;
-            System.out.println(selectedSpritePath);
-        }
-
-        public void saveLevel(String fileName) {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
-                oos.writeObject(levelSpritePaths);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        public void loadLevel(String fileName) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
-                levelSpritePaths = (ArrayList<String>) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            for(int i = 0; i < 31*28; i++){
-                try {
-                    JLabel label;
-                    label = (JLabel) getComponent(i);
-                    label.setIcon(new ImageIcon(ImageIO.read(new File(levelSpritePaths.get(i)))));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                });
+                add(wallCells[i][j]);
             }
         }
+    }
+    // Initialize the walls of the level editor view panel
+    private void initWalls(){
+        for(int row = 0; row < 31; row++){
+            for(int col = 0; col < 28; col++){
+                walls[row][col] = new Wall(row * 22 , col * 22);
+            }
+        }
+    }
 
+    // Getters and setters
+    public Wall[][] getWalls(){
+        return walls;
+    }
 
+    public void setWalls(Wall[][] walls){
+        for(int row = 0; row < 31; row++){
+            for(int col = 0; col < 28; col++){
+                this.walls[row][col] = walls[row][col];
+                this.wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
+            }
+        }
+    }
 }

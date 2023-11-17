@@ -12,7 +12,7 @@ public class Main {
 
     private static void createAndShowGUI() {
         JFrame f = new ApplicationFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setVisible(true);
     }
 }

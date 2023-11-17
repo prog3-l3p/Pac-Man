@@ -1,15 +1,17 @@
 package gamelogic.pacman;
 
 import gamelogic.Entity;
+import gui.ApplicationFrame;
 
-import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.HashMap;
 
+/**
+ * PacMan in the game.
+ */
 public class PacMan implements Entity {
-    private HashMap<String,BufferedImage> sprites = null;
+    private HashMap<String, BufferedImage> sprites;
     private BufferedImage currentSprite;
     private String currentDirection = "neutral";
     private int speedX;
@@ -18,8 +20,19 @@ public class PacMan implements Entity {
     private int y = 31*11;
 
     public PacMan() {
-        initSprites();
+        getInterestingSprites();
         currentSprite = sprites.get("neutral");
+    }
+    // Gets all the PacMan sprites from the sprites HashMap in ApplicationFrame.
+    private void getInterestingSprites() {
+        sprites = new HashMap<>();
+        for(String spritePath : ApplicationFrame.sprites.keySet()){
+            if(spritePath.contains("pacman")){
+                String spriteShortHand = spritePath
+                        .substring(spritePath.indexOf("pacman") + 7, spritePath.indexOf(".png"));
+                sprites.put(spriteShortHand, ApplicationFrame.sprites.get(spritePath));
+            }
+        }
     }
 
     public int getX(){
@@ -36,6 +49,7 @@ public class PacMan implements Entity {
             y += speedY;
     }
 
+    // Changes the current sprite to the next sprite in the animation.
     public BufferedImage getCurrentSprite(){
         switch(currentDirection){
             case "left" -> {
@@ -71,7 +85,7 @@ public class PacMan implements Entity {
         return currentSprite;
     }
 
-
+    // Changes the speed of PacMan based on the key pressed.
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         switch(key){
@@ -95,26 +109,6 @@ public class PacMan implements Entity {
                 speedY = 22;
                 speedX = 0;
             }
-        }
-    }
-
-    /**
-     *
-     */
-    private void initSprites(){
-        try {
-            sprites = new HashMap<>();
-            sprites.put("neutral", ImageIO.read(new File("res/sprites/pacman/neutral.png")));
-            sprites.put("right_1", ImageIO.read(new File("res/sprites/pacman/right_1.png")));
-            sprites.put("right_2", ImageIO.read(new File("res/sprites/pacman/right_2.png")));
-            sprites.put("left_1", ImageIO.read(new File("res/sprites/pacman/left_1.png")));
-            sprites.put("left_2", ImageIO.read(new File("res/sprites/pacman/left_2.png")));
-            sprites.put("up_1", ImageIO.read(new File("res/sprites/pacman/up_1.png")));
-            sprites.put("up_2", ImageIO.read(new File("res/sprites/pacman/up_2.png")));
-            sprites.put("down_1", ImageIO.read(new File("res/sprites/pacman/down_1.png")));
-            sprites.put("down_2", ImageIO.read(new File("res/sprites/pacman/down_2.png")));
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 
