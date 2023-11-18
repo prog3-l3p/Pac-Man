@@ -2,6 +2,7 @@ package gui.leveleditor;
 
 import gamelogic.nonmoving.Wall;
 import gui.Main;
+import gui.mainmenu.MainMenuFrame;
 import resourcehandler.ResourceHandler;
 
 import javax.swing.*;
@@ -36,10 +37,12 @@ public class LevelEditorFrame extends JFrame {
         wallChooserPanel.add(saveButton);
         JButton loadButton = new JButton("Load");
         wallChooserPanel.add(loadButton);
+        JButton mainMenuButton = new JButton("Main menu");
+        wallChooserPanel.add(mainMenuButton);
 
         saveButton.addActionListener(e -> showDialog(SAVE_LEVEL));
-
         loadButton.addActionListener(e -> showDialog(LOAD_LEVEL));
+        mainMenuButton.addActionListener(e -> Main.setDisplayedFrame(new MainMenuFrame()));
         pack();
     }
 

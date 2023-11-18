@@ -1,9 +1,11 @@
 package resourcehandler;
 
+import gamelogic.nonmoving.Food;
 import gamelogic.nonmoving.Wall;
 import gui.Main;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -16,6 +18,8 @@ import java.util.logging.Level;
 public class ResourceHandler {
     private static final HashMap<String, BufferedImage> sprites = new HashMap<>();
     private static Font pacFont;
+
+    private static Wall[][] currentLevel = null;
 
     public void init(){
         initSprites();
@@ -85,5 +89,30 @@ public class ResourceHandler {
         return new Wall[0][0];
     }
 
+    public static void levelSelectDialog(JComponent component){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select level");
 
+        int userSelection = fileChooser.showOpenDialog(component);
+
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            currentLevel = ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
+        }
+    }
+
+    public static Wall[][] getCurrentLevel(){
+        return currentLevel;
+    }
+
+    public static Food[][] createFoods(){
+        Food[][] foods = new Food[31][28];
+        for(int y = 0; y < 31; y++)
+            for(int x = 0; x < 28; x++){
+                if(currentLevel[y][x].isTraversableByPacMan())
+                    foods[y][x] = new Food(x,y);
+            }
+        return foods;
+    }
 }

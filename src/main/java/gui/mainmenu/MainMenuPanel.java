@@ -13,6 +13,7 @@ public class MainMenuPanel extends JPanel {
     private JButton gameButton;
     public MainMenuPanel() {
         setLayout(new BorderLayout());
+
         setBackground(Color.YELLOW);
         createLabel();
         createButtonPanel();
@@ -60,6 +61,12 @@ public class MainMenuPanel extends JPanel {
         gameButton.setForeground(Color.BLACK);
         gameButton.setBackground(Color.YELLOW);
         gameButton.setBorderPainted(false);
-        gameButton.addActionListener(e -> Main.setDisplayedFrame(new GameFrame()));
+        gameButton.addActionListener(e -> {
+            ResourceHandler.levelSelectDialog(this);
+            if(ResourceHandler.getCurrentLevel() != null)
+                Main.setDisplayedFrame(new GameFrame());
+            else Main.setDisplayedFrame(new MainMenuFrame());
+        });
     }
+
 }

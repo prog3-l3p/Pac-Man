@@ -1,11 +1,13 @@
 package gui.leveleditor;
 
 import gamelogic.nonmoving.Wall;
+import resourcehandler.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * This class is responsible for displaying the level in the level editor.
@@ -41,9 +43,23 @@ public class EditorViewPanel extends JPanel {
                     public void mouseClicked(MouseEvent e) {
                         int col = wallCells[finalI][finalJ].getX() / wallCells[finalI][finalJ].getWidth();
                         int row = wallCells[finalI][finalJ].getY() / wallCells[finalI][finalJ].getWidth();
+                        Wall editedWall = walls[row][col];
                         if(LevelEditorFrame.getCurrentWallSprite() != null){
-                            walls[row][col].setSprite(LevelEditorFrame.getCurrentWallSprite());
-                            wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
+                            // Terrible
+                            BufferedImage newIcon = ResourceHandler.getSprites()
+                                    .get(editedWall.getSpriteNames()
+                                            .get(LevelEditorFrame.getCurrentWallSprite()));
+                            if(LevelEditorFrame.getCurrentWallSprite().equals("pm-non-traverse")){
+                                editedWall.setSprite("empty");
+                                editedWall.setTraversableByPacMan(false);
+                            }else if(!LevelEditorFrame.getCurrentWallSprite().equals("empty")){
+                                editedWall.setSprite(LevelEditorFrame.getCurrentWallSprite());
+                                editedWall.setTraversableByPacMan(false);
+                                editedWall.setTraversableByGhosts(false);
+                            }else{
+                                editedWall.setSprite(LevelEditorFrame.getCurrentWallSprite());
+                            }
+                            wallCells[row][col].setIcon(new ImageIcon(newIcon));
                         }
                     }
                 });
@@ -55,7 +71,7 @@ public class EditorViewPanel extends JPanel {
     private void initWalls(){
         for(int row = 0; row < 31; row++){
             for(int col = 0; col < 28; col++){
-                walls[row][col] = new Wall(row * 22 , col * 22);
+                walls[row][col] = new Wall(col , row);
             }
         }
     }
@@ -69,7 +85,7 @@ public class EditorViewPanel extends JPanel {
         for(int row = 0; row < 31; row++){
             for(int col = 0; col < 28; col++){
                 this.walls[row][col] = walls[row][col];
-                this.wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
+                this.wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getSprite()));
             }
         }
     }

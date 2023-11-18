@@ -44,21 +44,31 @@ public class PacMan implements Entity {
         return y;
     }
 
+    public int getWidth(){
+        return getSprite().getWidth();
+    }
+    public int getHeight(){
+        return getSprite().getHeight();
+    }
+
     public void move(){
-        if(x + speedX >= 0 && x + speedX <= 28*22)
+        if(ResourceHandler.getCurrentLevel()[(y + speedY) % 31][(x + speedX) % 28].isTraversableByPacMan()) {
+            if (x + speedX == 28) x = 0;
+            else if (x + speedX == 0) x = 28;
             x += speedX;
-        if(y + speedY >= 0 && y + speedY <= 31*22)
             y += speedY;
+        }
     }
 
     public void menuMove(int screenWidth){
         currentDirection = "right";
-        if(x + 22 <= screenWidth) x += 22;
+        if(x + 1 <= screenWidth) x += 1;
         else x = 0;
+        currentSprite = getSprite();
     }
 
-    // Changes the current sprite to the next sprite in the animation.
-    public BufferedImage getCurrentSprite(){
+    // Gets the current sprite of PacMan and if needed changes it to the next one appropriate
+    public BufferedImage getSprite(){
         switch(currentDirection){
             case "left" -> {
                 if(currentSprite == sprites.get("left_1")){
@@ -99,22 +109,22 @@ public class PacMan implements Entity {
         switch(key){
             case KeyEvent.VK_LEFT -> {
                 currentDirection = "left";
-                speedX = -22;
+                speedX = -1;
                 speedY = 0;
             }
             case KeyEvent.VK_RIGHT -> {
                 currentDirection = "right";
-                speedX = 22;
+                speedX = 1;
                 speedY = 0;
             }
             case KeyEvent.VK_UP ->  {
                 currentDirection = "up";
-                speedY = -22;
+                speedY = -1;
                 speedX = 0;
             }
             case KeyEvent.VK_DOWN -> {
                 currentDirection = "down";
-                speedY = 22;
+                speedY = 1;
                 speedX = 0;
             }
         }

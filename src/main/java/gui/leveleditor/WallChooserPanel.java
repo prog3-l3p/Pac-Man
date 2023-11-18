@@ -12,7 +12,6 @@ import java.util.HashMap;
  */
 public class WallChooserPanel extends JPanel {
     private static HashMap<String, BufferedImage> sprites;
-
     static JLabel currentWallPanel = new JLabel();
     static JComboBox<String> wallChooser = new JComboBox<>();
     public WallChooserPanel(){
