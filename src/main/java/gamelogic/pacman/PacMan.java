@@ -52,11 +52,14 @@ public class PacMan implements Entity {
     }
 
     public void move(){
+        if(x <= 0) {x += 28;}
+        if(y <= 0) {y += 31;}
         if(ResourceHandler.getCurrentLevel()[(y + speedY) % 31][(x + speedX) % 28].isTraversableByPacMan()) {
-            if (x + speedX == 28) x = 0;
-            else if (x + speedX == 0) x = 28;
-            x += speedX;
-            y += speedY;
+            x = (x + speedX) % 28;
+            y = (y + speedY) % 31;
+        }
+        if(ResourceHandler.getCurrentFoods()[y][x] != null){
+            ResourceHandler.getCurrentFoods()[y][x].eat();
         }
     }
 

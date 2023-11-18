@@ -71,7 +71,7 @@ public class EditorViewPanel extends JPanel {
     private void initWalls(){
         for(int row = 0; row < 31; row++){
             for(int col = 0; col < 28; col++){
-                walls[row][col] = new Wall(col , row);
+                walls[row][col] = new Wall(col, row);
             }
         }
     }

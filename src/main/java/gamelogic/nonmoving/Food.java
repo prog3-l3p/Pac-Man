@@ -62,4 +62,8 @@ public class Food implements Entity {
         sprite = sprites.get(name);
     }
 
+
+    public void eat(){
+        setSprite("none");
+    }
 }

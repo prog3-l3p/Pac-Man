@@ -18,8 +18,10 @@ import java.util.logging.Level;
 public class ResourceHandler {
     private static final HashMap<String, BufferedImage> sprites = new HashMap<>();
     private static Font pacFont;
-
     private static Wall[][] currentLevel = null;
+
+    private static Food[][] currentFoods = null;
+
 
     public void init(){
         initSprites();
@@ -113,6 +115,11 @@ public class ResourceHandler {
                 if(currentLevel[y][x].isTraversableByPacMan())
                     foods[y][x] = new Food(x,y);
             }
+        currentFoods = foods;
         return foods;
+    }
+
+    public static Food[][] getCurrentFoods() {
+        return currentFoods;
     }
 }
