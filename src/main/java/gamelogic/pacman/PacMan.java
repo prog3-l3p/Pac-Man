@@ -1,7 +1,7 @@
 package gamelogic.pacman;
 
 import gamelogic.Entity;
-import gui.ApplicationFrame;
+import resourcehandler.ResourceHandler;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -16,21 +16,23 @@ public class PacMan implements Entity {
     private String currentDirection = "neutral";
     private int speedX;
     private int speedY;
-    private int x = 28*11;
-    private int y = 31*11;
+    private int x;
+    private int y;
 
-    public PacMan() {
+    public PacMan(int x, int y) {
+        this.x = x;
+        this.y = y;
         getInterestingSprites();
         currentSprite = sprites.get("neutral");
     }
     // Gets all the PacMan sprites from the sprites HashMap in ApplicationFrame.
     private void getInterestingSprites() {
         sprites = new HashMap<>();
-        for(String spritePath : ApplicationFrame.sprites.keySet()){
+        for(String spritePath : ResourceHandler.getSprites().keySet()){
             if(spritePath.contains("pacman")){
                 String spriteShortHand = spritePath
                         .substring(spritePath.indexOf("pacman") + 7, spritePath.indexOf(".png"));
-                sprites.put(spriteShortHand, ApplicationFrame.sprites.get(spritePath));
+                sprites.put(spriteShortHand, ResourceHandler.getSprites().get(spritePath));
             }
         }
     }
@@ -47,6 +49,12 @@ public class PacMan implements Entity {
             x += speedX;
         if(y + speedY >= 0 && y + speedY <= 31*22)
             y += speedY;
+    }
+
+    public void menuMove(int screenWidth){
+        currentDirection = "right";
+        if(x + 22 <= screenWidth) x += 22;
+        else x = 0;
     }
 
     // Changes the current sprite to the next sprite in the animation.

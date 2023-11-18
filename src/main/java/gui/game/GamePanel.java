@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import gamelogic.nonmoving.Wall;
 import gamelogic.pacman.PacMan;
@@ -13,11 +13,11 @@ import java.awt.event.KeyEvent;
  */
 public class GamePanel extends JPanel {
     private final Timer timer;
-    private final PacMan pacMan = new PacMan();
-
+    private final PacMan pacMan = new PacMan(31*11,28*11);
     private Wall[][] level;
 
     public GamePanel() {
+
         setBackground(Color.BLACK);
 
         timer = new Timer(100, e -> {
@@ -41,6 +41,7 @@ public class GamePanel extends JPanel {
         return new Dimension(29*22,32*22);
     }
 
+    @Override
     public void paint(Graphics g){
         super.paint(g);
         g.drawImage(pacMan.getCurrentSprite(), pacMan.getX(), pacMan.getY(), this);

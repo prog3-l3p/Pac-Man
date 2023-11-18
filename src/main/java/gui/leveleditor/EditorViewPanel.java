@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
  */
 public class EditorViewPanel extends JPanel {
     private final Wall[][] walls = new Wall[31][28];
-    private JLabel[][] wallCells = new JLabel[31][28];
+    private final JLabel[][] wallCells = new JLabel[31][28];
 
     // Initialize the level editor view panel
     public EditorViewPanel(){
