@@ -41,9 +41,8 @@ public class EditorViewPanel extends JPanel {
                     public void mouseClicked(MouseEvent e) {
                         int col = wallCells[finalI][finalJ].getX() / wallCells[finalI][finalJ].getWidth();
                         int row = wallCells[finalI][finalJ].getY() / wallCells[finalI][finalJ].getWidth();
-                        System.out.println("row: " + row + " col: " + col);
-                        if(LevelEditorPanel.currentWallSprite != null){
-                            walls[row][col].setSprite(LevelEditorPanel.currentWallSprite);
+                        if(LevelEditorFrame.getCurrentWallSprite() != null){
+                            walls[row][col].setSprite(LevelEditorFrame.getCurrentWallSprite());
                             wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
                         }
                     }

@@ -1,6 +1,6 @@
 package gui.leveleditor;
 
-import gui.ApplicationFrame;
+import resourcehandler.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +11,10 @@ import java.util.HashMap;
  * A panel that allows the user to choose a wall sprite.
  */
 public class WallChooserPanel extends JPanel {
-    private HashMap<String, BufferedImage> sprites;
-    JLabel currentWallPanel = new JLabel();
-    JComboBox<String> wallChooser = new JComboBox<>();
+    private static HashMap<String, BufferedImage> sprites;
+
+    static JLabel currentWallPanel = new JLabel();
+    static JComboBox<String> wallChooser = new JComboBox<>();
     public WallChooserPanel(){
         setLayout(new FlowLayout());
         getInterestingSprites();
@@ -23,13 +24,13 @@ public class WallChooserPanel extends JPanel {
     }
 
     // Gets all the wall sprites from the sprites HashMap in ApplicationFrame.
-    private void getInterestingSprites() {
+    private static void getInterestingSprites() {
         sprites = new HashMap<>();
-        for(String spritePath : ApplicationFrame.sprites.keySet()){
+        for(String spritePath : ResourceHandler.getSprites().keySet()){
             if(spritePath.contains("walls")){
                 String spriteShortHand = spritePath
                         .substring(spritePath.indexOf("walls") + 6, spritePath.indexOf(".png"));
-                sprites.put(spriteShortHand, ApplicationFrame.sprites.get(spritePath));
+                sprites.put(spriteShortHand, ResourceHandler.getSprites().get(spritePath));
             }
         }
     }
@@ -41,7 +42,7 @@ public class WallChooserPanel extends JPanel {
         }
         wallChooser.addActionListener(e -> {
             currentWallPanel.setIcon(new ImageIcon(sprites.get(wallChooser.getSelectedItem())));
-            LevelEditorPanel.currentWallSprite = (String) wallChooser.getSelectedItem();
+            LevelEditorFrame.setCurrentWallSprite((String) wallChooser.getSelectedItem());
         });
         add(wallChooser);
     }
