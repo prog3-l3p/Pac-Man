@@ -25,12 +25,14 @@ import java.util.ArrayList;
 public class EditorViewPanel extends JPanel {
     private final ArrayList<ArrayList<Entity>> entities = new ArrayList<>();
     private final ArrayList<ArrayList<JLabel>> cells = new ArrayList<>();
-
     private boolean pacManPlaced = false;
     private boolean inkyPlaced = false;
     private boolean blinkyPlaced = false;
     private boolean pinkyPlaced = false;
     private boolean clydePlaced = false;
+    private static final int COLUMN_COUNT = 28;
+    private static final int ROW_COUNT = 31;
+    private static final int CELL_SIZE = 22;
 
     /**
      * Constructor for the level editor view panel
@@ -38,7 +40,7 @@ public class EditorViewPanel extends JPanel {
     public EditorViewPanel(){
         initEntities();
         initCells();
-        setLayout(new GridLayout(31, 28));
+        setLayout(new GridLayout(ROW_COUNT, COLUMN_COUNT));
         setBackground(Color.BLACK);
     }
 
@@ -46,11 +48,11 @@ public class EditorViewPanel extends JPanel {
      * Initialize the JLabels that represent the cells of the level editor view panel
      */
     private void initCells(){
-        Dimension cellSize = new Dimension(22,22);
+        Dimension cellSize = new Dimension(CELL_SIZE,CELL_SIZE);
         // Create a 31row*28column grid of JLabels
-        for(int y = 0; y < 31; y++){
+        for(int y = 0; y < ROW_COUNT; y++){
             ArrayList<JLabel> rowLabels = new ArrayList<>();
-            for(int x = 0; x < 28; x++){
+            for(int x = 0; x < COLUMN_COUNT; x++){
                 JLabel cell = new JLabel();
                 cell.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
                 cell.setPreferredSize(cellSize);
@@ -121,16 +123,15 @@ public class EditorViewPanel extends JPanel {
      * Initializes the entity list with food entities
      */
     private void initEntities(){
-        for(int y = 0; y < 31; y++){
+        for(int y = 0; y < ROW_COUNT; y++){
             entities.add(new ArrayList<>());
-            for(int x = 0; x < 28; x++){
+            for(int x = 0; x < COLUMN_COUNT; x++){
                 entities.get(y).add(x, new Food(x, y));
             }
         }
     }
 
     /**
-     * Returns the created level
      * @return an ArrayList of ArrayLists of entities
      */
     public ArrayList<ArrayList<Entity>> getEntities(){
@@ -138,13 +139,13 @@ public class EditorViewPanel extends JPanel {
     }
 
     /**
-     * "Loads" the level into the level editor
+     * Loads the level into the level editor
      * @param entities the entities to be loaded
      */
     public void loadEntities(ArrayList<ArrayList<Entity>> entities) {
-        for (int y = 0; y < 31; y++) {
+        for (int y = 0; y < ROW_COUNT; y++) {
             this.entities.add(new ArrayList<>());
-            for (int x = 0; x < 28; x++) {
+            for (int x = 0; x < COLUMN_COUNT; x++) {
                 this.entities.get(y).set(x, entities.get(y).get(x));
                 BufferedImage entitySprite = entities.get(y).get(x).getSprite();
                 BufferedImage emptyCell = ResourceHandler.getSpriteMap("walls").get("empty");

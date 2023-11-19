@@ -14,8 +14,6 @@ public class Clyde extends Entity {
         return null;
     }
 
-
-
     @Override
     public boolean isTraversableByPacMan() {
         return false;

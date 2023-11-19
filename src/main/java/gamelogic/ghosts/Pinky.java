@@ -3,9 +3,8 @@ package gamelogic.ghosts;
 import gamelogic.Entity;
 
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
 
-public class Pinky extends Entity implements Serializable {
+public class Pinky extends Entity  {
     public Pinky(int x, int y) {
         super(x, y);
     }
@@ -14,8 +13,6 @@ public class Pinky extends Entity implements Serializable {
     public BufferedImage getSprite() {
         return null;
     }
-
-
 
     @Override
     public boolean isTraversableByPacMan() {

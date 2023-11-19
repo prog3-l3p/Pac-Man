@@ -7,25 +7,27 @@ import gamelogic.pacman.PacMan;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
+/**
+ * This class is responsible for the Pac-Man animation in the main menu.
+ */
 public class MenuPacAnimationPanel extends JPanel {
-    private final Timer timer;
     private final PacMan pacMan = new PacMan(0, 0);
     ArrayList<Entity> foods = new ArrayList<>();
-
-    Random random = new Random();
 
     public MenuPacAnimationPanel(){
         setBackground(Color.BLACK);
         initFoods();
-        timer = new Timer(200, e -> {
+        Timer timer = new Timer(200, e -> {
             repaint();
             pacMan.menuMove(this.getWidth() / pacMan.getWidth());
         });
         timer.start();
     }
 
+    /**
+     * Initialize the food entities
+     */
     private void initFoods(){
         for(int i = 0; i < 23; i ++){
             Food f = new Food(i, 0);
@@ -33,17 +35,24 @@ public class MenuPacAnimationPanel extends JPanel {
         }
     }
 
+    /**
+     * @return the preferred size of the panel
+     */
     @Override
     public Dimension getPreferredSize() {
         return new Dimension(100,22);
     }
 
+    /**
+     * Paints Pac-Man and the food entities
+     * @param g  the <code>Graphics</code> context in which to paint
+     */
     @Override
     public void paint(Graphics g){
         super.paint(g);
         for(Entity e : foods){
-            if(e.getX() < pacMan.getX()){
-                e.setSprite("none");
+            if(e.getX() == pacMan.getX()){
+                e.eat();
             }
             if(e.getX() > pacMan.getX()){
                 e.setSprite("food");

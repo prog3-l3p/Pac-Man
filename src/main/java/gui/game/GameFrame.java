@@ -4,6 +4,9 @@ import resourcehandler.ResourceHandler;
 
 import javax.swing.*;
 
+/**
+ * GameFrame class
+ */
 public class GameFrame extends JFrame {
     public GameFrame(){
         super("Pac-Man");

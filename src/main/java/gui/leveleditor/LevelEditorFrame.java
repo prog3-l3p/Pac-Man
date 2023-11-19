@@ -25,7 +25,9 @@ public class LevelEditorFrame extends JFrame {
     private static final String SAVE_LEVEL = "Save Level";
     private static final String LOAD_LEVEL = "Load Level";
 
-    // Initialize the level editor panel
+    /**
+     * Constructor for the level editor frame
+     */
     public LevelEditorFrame(){
         setTitle("Level editor");
         setIconImage(ResourceHandler.getIcon("LevelEditorIcon"));
@@ -51,16 +53,36 @@ public class LevelEditorFrame extends JFrame {
         pack();
     }
 
+    /**
+     * @return the current sprite that is selected in the level editor
+     */
     public static String getCurrentSprite(){
         return currentSprite;
     }
+
+    /**
+     * @return the current entity type that is selected in the level editor
+     */
     public static String getCurrentEntityType(){return currentEntityType;}
+
+    /**
+     * Set the current sprite that is selected in the level editor
+     * @param spriteName the name of the sprite that is selected
+     */
     public static void setCurrentSprite(String spriteName){
         currentSprite = spriteName;
     }
+
+    /**
+     * Set the current entity type that is selected in the level editor
+     * @param entityType the type of the entity that is selected
+     */
     public static void setCurrentEntityType(String entityType){currentEntityType = entityType;}
 
-    // Show a dialog to save or load the level
+    /**
+     * Show a dialog that allows the user to save or load a level
+     * @param title the title of the dialog
+     */
     private void showDialog(String title) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle(title);

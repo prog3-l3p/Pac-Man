@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 public class Main {
     public static final Logger logger = Logger.getLogger("Error");
-    public static final ResourceHandler resourceHandler = new ResourceHandler();
     private static JFrame displayedFrame;
 
     public static void main(String[] args) {
@@ -16,7 +15,7 @@ public class Main {
     }
 
     private static void createAndShowGUI() {
-        resourceHandler.init();
+        ResourceHandler.init();
         displayedFrame = new MainMenuFrame();
         displayedFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         displayedFrame.setVisible(true);

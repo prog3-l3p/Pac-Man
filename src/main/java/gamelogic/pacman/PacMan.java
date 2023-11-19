@@ -5,106 +5,112 @@ import resourcehandler.ResourceHandler;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.Serializable;
-import java.util.HashMap;
 
 /**
- * PacMan in the game.
+ * This class represents the PacMan entity
  */
-public class PacMan extends Entity implements Serializable {
-    private transient HashMap<String, BufferedImage> sprites;
-    private transient BufferedImage currentSprite;
-    private String currentDirection = "neutral";
+public class PacMan extends Entity {
+    private String currentDirection = NEUTRAL;
     private int speedX;
     private int speedY;
+    private static final int COLUMN_COUNT = 28;
+    private static final int ROW_COUNT = 31;
+    private static final String NEUTRAL = "neutral";
+    private static final String LEFT_1 = "left_1";
+    private static final String LEFT_2 = "left_2";
+    private static final String RIGHT_1 = "right_1";
+    private static final String RIGHT_2 = "right_2";
+    private static final String UP_1 = "up_1";
+    private static final String UP_2 = "up_2";
+    private static final String DOWN_1 = "down_1";
+    private static final String DOWN_2 = "down_2";
 
+    /**
+     * Constructor for PacMan
+     * @param x x-coordinate
+     * @param y y-coordinate
+     */
     public PacMan(int x, int y) {
         super(x ,y);
-        sprites = ResourceHandler.getSpriteMap("pacman");
-        currentSprite = sprites.get("neutral");
+        setSprite(NEUTRAL);
     }
 
-    public int getX(){
-        return x;
-    }
-    public int getY(){
-        return y;
-    }
-
-    public int getWidth(){
-        return getSprite().getWidth();
-    }
-    public int getHeight(){
-        return getSprite().getHeight();
-    }
-
+    /**
+     * Moves PacMan in the direction he is currently facing.
+     * If PacMan is at the edge of the map (left or right side), he will wrap around to the other side.
+     * If PacMan is facing a wall, he will not move.
+     * If PacMan is facing food, he will eat it.
+     */
+    @Override
     public void move(){
-        if(x <= 0) {x += 28;}
-        if(y <= 0) {y += 31;}
-        if(ResourceHandler.getCurrentLevel().get((x + speedX) % 28).get((y + speedY) % 31).isTraversableByPacMan()) {
-            x = (x + speedX) % 28;
-            y = (y + speedY) % 31;
+        if(x <= 0) {x += COLUMN_COUNT;}
+        if(y <= 0) {y += ROW_COUNT;}
+        Entity e = ResourceHandler.getCurrentLevel().get((x + speedX) % COLUMN_COUNT).get((y + speedY) % ROW_COUNT);
+        if(e.isTraversableByPacMan()) {
+            x = (x + speedX) % COLUMN_COUNT;
+            y = (y + speedY) % ROW_COUNT;
         }
-        if(ResourceHandler.getCurrentLevel().get(x).get(y) != null){
-            ResourceHandler.getCurrentLevel().get(x).get(y).eat();
-        }
+        e.eat();
     }
 
+    /**
+     * Used for the menu screen. Moves PacMan to the right.
+     * @param screenWidth the width of the menu window
+     */
     public void menuMove(int screenWidth){
         currentDirection = "right";
         if(x + 1 <= screenWidth) x += 1;
         else x = 0;
-        currentSprite = getSprite();
     }
 
-    // Gets the current sprite of PacMan and if needed changes it to the next one appropriate
+    /**
+     * Sets the current sprite of PacMan based on his previous sprite and the direction he is facing.
+     * @return the current sprite of PacMan
+     */
     public BufferedImage getSprite(){
         switch(currentDirection){
             case "left" -> {
-                if(currentSprite == sprites.get("left_1")){
-                    currentSprite = sprites.get("left_2");
+                if(spriteName.equals(LEFT_1)){
+                    setSprite(LEFT_2);
                 } else {
-                    currentSprite = sprites.get("left_1");
+                    setSprite(LEFT_1);
                 }
             }
             case "right" -> {
-                if(currentSprite == sprites.get("right_1")){
-                    currentSprite = sprites.get("right_2");
+                if(spriteName.equals(RIGHT_1)){
+                    setSprite(RIGHT_2);
                 } else {
-                    currentSprite = sprites.get("right_1");
+                    setSprite(RIGHT_1);
                 }
             }
             case "up" -> {
-                if(currentSprite == sprites.get("up_1")){
-                    currentSprite = sprites.get("up_2");
+                if(spriteName.equals(UP_1)){
+                    setSprite(UP_2);
                 } else {
-                    currentSprite = sprites.get("up_1");
+                    setSprite(UP_1);
                 }
             }
             case "down" -> {
-                if(currentSprite == sprites.get("down_1")){
-                    currentSprite = sprites.get("down_2");
+                if(spriteName.equals(DOWN_1)){
+                    setSprite(DOWN_2);
                 } else {
-                    currentSprite = sprites.get("down_1");
+                    setSprite(DOWN_1);
                 }
             }
         }
 
-        return currentSprite;
-    }
-
-    @Override
-    public void setSprite(String spriteName) {
-        super.setSprite(spriteName);
-        currentSprite = sprites.get(spriteName);
+        return ResourceHandler.getSpriteMap("pacman").get(spriteName);
     }
 
     @Override
     public boolean isTraversableByPacMan() {
-        return false;
+        return true;
     }
 
-    // Changes the speed of PacMan based on the key pressed.
+    /**
+     * Sets the current direction of PacMan based on the key pressed.
+     * @param e the key pressed
+     */
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         switch(key){
@@ -131,4 +137,8 @@ public class PacMan extends Entity implements Serializable {
         }
     }
 
+    @Override
+    public PacMan isPacMan() {
+        return this;
+    }
 }

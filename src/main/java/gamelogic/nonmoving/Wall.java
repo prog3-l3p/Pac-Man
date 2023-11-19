@@ -4,8 +4,9 @@ import gamelogic.Entity;
 import resourcehandler.ResourceHandler;
 
 import java.awt.image.BufferedImage;
+
 /**
- * A wall in the game.
+ * This class represents a wall entity
  */
 public class Wall extends Entity {
     public Wall(int x, int y){

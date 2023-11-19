@@ -11,14 +11,23 @@ import java.awt.image.BufferedImage;
  */
 public class EntityChooserPanel extends JPanel {
     static JLabel currentEntityPanel = new JLabel();
+    private static final int CELL_SIZE = 22;
     public EntityChooserPanel(){
         setLayout(new FlowLayout());
         createMenu();
         add(new JLabel("Selected entity:"));
-        currentEntityPanel.setPreferredSize(new Dimension(22, 22));
+        currentEntityPanel.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
         add(currentEntityPanel);
     }
 
+    /**
+     * Create the menu that allows the user to select an entity to place on the map
+     * The menu is created based on the entities that are available in the resource handler
+     * The user can select an entity by clicking on it in the menu
+     * When an entity is selected, the current entity panel is updated to show the selected entity
+     * The current entity type and sprite are also updated
+     * The user can then place the selected entity on the map
+     */
     private void createMenu(){
         JMenuBar menuBar = new JMenuBar();
         for(String entityType : ResourceHandler.getEntityTypes()){
