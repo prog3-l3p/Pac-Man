@@ -1,5 +1,6 @@
 package gui.mainmenu;
 
+import gamelogic.Entity;
 import gamelogic.nonmoving.Food;
 import gamelogic.pacman.PacMan;
 
@@ -11,7 +12,7 @@ import java.util.Random;
 public class MenuPacAnimationPanel extends JPanel {
     private final Timer timer;
     private final PacMan pacMan = new PacMan(0, 0);
-    ArrayList<Food> foods = new ArrayList<>();
+    ArrayList<Entity> foods = new ArrayList<>();
 
     Random random = new Random();
 
@@ -27,7 +28,8 @@ public class MenuPacAnimationPanel extends JPanel {
 
     private void initFoods(){
         for(int i = 0; i < 23; i ++){
-            foods.add(new Food(i,0));
+            Food f = new Food(i, 0);
+            foods.add(f);
         }
     }
 
@@ -39,14 +41,14 @@ public class MenuPacAnimationPanel extends JPanel {
     @Override
     public void paint(Graphics g){
         super.paint(g);
-        for(Food f : foods){
-            if(f.getX() < pacMan.getX()){
-                f.setSprite("none");
+        for(Entity e : foods){
+            if(e.getX() < pacMan.getX()){
+                e.setSprite("none");
             }
-            if(f.getX() > pacMan.getX()){
-                f.setSprite("food");
+            if(e.getX() > pacMan.getX()){
+                e.setSprite("food");
             }
-            f.draw(g);
+            e.draw(g);
         }
         pacMan.draw(g);
     }

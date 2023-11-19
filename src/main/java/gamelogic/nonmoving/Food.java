@@ -4,20 +4,21 @@ import gamelogic.Entity;
 import resourcehandler.ResourceHandler;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.*;
 
-public class Food implements Entity {
-    private HashMap<String, BufferedImage> sprites;
-    private BufferedImage sprite;
-
+public class Food extends Entity {
+    private transient HashMap<String, BufferedImage> sprites;
+/*    private String spriteName;*/
     private final Random random = new Random();
-    private int x;
-    private int y;
+
+    public Food(){
+        super(0,0);
+    }
 
     public Food(int x, int y){
-        this.x = x;
-        this.y = y;
-        getInterestingSprites();
+        super(x ,y);
+        sprites = ResourceHandler.getSpriteMap("edibles");
         setSprite("food");
     }
 
@@ -29,27 +30,8 @@ public class Food implements Entity {
         return y;
     }
 
-    public int getWidth(){
-        return sprite.getWidth();
-    }
-
-    public int getHeight(){
-        return sprite.getHeight();
-    }
-
     public BufferedImage getSprite(){
-        return sprite;
-    }
-
-    private void getInterestingSprites() {
-        sprites = new HashMap<>();
-        for(String spritePath : ResourceHandler.getSprites().keySet()){
-            if(spritePath.contains("edibles")){
-                String spriteShortHand = spritePath
-                        .substring(spritePath.indexOf("edibles") + 8, spritePath.indexOf(".png"));
-                sprites.put(spriteShortHand, ResourceHandler.getSprites().get(spritePath));
-            }
-        }
+        return ResourceHandler.getSpriteMap("edibles").get(spriteName);
     }
 
     private BufferedImage getRandomSprite(){
@@ -58,11 +40,19 @@ public class Food implements Entity {
         return spriteList.get(randomSpriteIndex);
     }
 
-    public void setSprite(String name){
-        sprite = sprites.get(name);
+/*    public void setSprite(String spriteName){
+        super.setSprite(spriteName);
+        this.spriteName = spriteName;
+    }*/
+
+
+    @Override
+    public boolean isTraversableByPacMan() {
+        return true;
     }
 
 
+    @Override
     public void eat(){
         setSprite("none");
     }

@@ -5,36 +5,23 @@ import resourcehandler.ResourceHandler;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * PacMan in the game.
  */
-public class PacMan implements Entity {
-    private HashMap<String, BufferedImage> sprites;
-    private BufferedImage currentSprite;
+public class PacMan extends Entity implements Serializable {
+    private transient HashMap<String, BufferedImage> sprites;
+    private transient BufferedImage currentSprite;
     private String currentDirection = "neutral";
     private int speedX;
     private int speedY;
-    private int x;
-    private int y;
 
     public PacMan(int x, int y) {
-        this.x = x;
-        this.y = y;
-        getInterestingSprites();
+        super(x ,y);
+        sprites = ResourceHandler.getSpriteMap("pacman");
         currentSprite = sprites.get("neutral");
-    }
-    // Gets all the PacMan sprites from the sprites HashMap in ApplicationFrame.
-    private void getInterestingSprites() {
-        sprites = new HashMap<>();
-        for(String spritePath : ResourceHandler.getSprites().keySet()){
-            if(spritePath.contains("pacman")){
-                String spriteShortHand = spritePath
-                        .substring(spritePath.indexOf("pacman") + 7, spritePath.indexOf(".png"));
-                sprites.put(spriteShortHand, ResourceHandler.getSprites().get(spritePath));
-            }
-        }
     }
 
     public int getX(){
@@ -54,12 +41,12 @@ public class PacMan implements Entity {
     public void move(){
         if(x <= 0) {x += 28;}
         if(y <= 0) {y += 31;}
-        if(ResourceHandler.getCurrentLevel()[(y + speedY) % 31][(x + speedX) % 28].isTraversableByPacMan()) {
+        if(ResourceHandler.getCurrentLevel().get((x + speedX) % 28).get((y + speedY) % 31).isTraversableByPacMan()) {
             x = (x + speedX) % 28;
             y = (y + speedY) % 31;
         }
-        if(ResourceHandler.getCurrentFoods()[y][x] != null){
-            ResourceHandler.getCurrentFoods()[y][x].eat();
+        if(ResourceHandler.getCurrentLevel().get(x).get(y) != null){
+            ResourceHandler.getCurrentLevel().get(x).get(y).eat();
         }
     }
 
@@ -104,6 +91,17 @@ public class PacMan implements Entity {
         }
 
         return currentSprite;
+    }
+
+    @Override
+    public void setSprite(String spriteName) {
+        super.setSprite(spriteName);
+        currentSprite = sprites.get(spriteName);
+    }
+
+    @Override
+    public boolean isTraversableByPacMan() {
+        return false;
     }
 
     // Changes the speed of PacMan based on the key pressed.

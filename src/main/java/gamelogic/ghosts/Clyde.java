@@ -1,30 +1,23 @@
 package gamelogic.ghosts;
 
-import java.awt.*;
+import gamelogic.Entity;
 
-public class Clyde implements Ghost {
-    @Override
-    public int getX() {
-        return 0;
+import java.awt.image.BufferedImage;
+
+public class Clyde extends Entity {
+    public Clyde(int x, int y) {
+        super(x, y);
     }
 
     @Override
-    public int getY() {
-        return 0;
-    }
-
-    @Override
-    public int getWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
-
-    @Override
-    public Image getSprite() {
+    public BufferedImage getSprite() {
         return null;
+    }
+
+
+
+    @Override
+    public boolean isTraversableByPacMan() {
+        return false;
     }
 }

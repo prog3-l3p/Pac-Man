@@ -1,30 +1,24 @@
 package gamelogic.ghosts;
 
-import java.awt.*;
+import gamelogic.Entity;
 
-public class Inky implements Ghost {
-    @Override
-    public int getX() {
-        return 0;
+import java.awt.image.BufferedImage;
+import java.io.Serializable;
+
+public class Inky extends Entity implements Serializable {
+    public Inky(int x, int y) {
+        super(x, y);
     }
 
     @Override
-    public int getY() {
-        return 0;
-    }
-
-    @Override
-    public int getWidth() {
-        return 0;
-    }
-
-    @Override
-    public int getHeight() {
-        return 0;
-    }
-
-    @Override
-    public Image getSprite() {
+    public BufferedImage getSprite() {
         return null;
+    }
+
+
+
+    @Override
+    public boolean isTraversableByPacMan() {
+        return false;
     }
 }

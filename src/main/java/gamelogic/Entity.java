@@ -1,22 +1,54 @@
 package gamelogic;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 
-public interface Entity {
+public abstract class Entity implements Serializable {
+    protected int x;
+    protected int y;
+    protected String spriteName;
+    protected boolean traversableByPacMan = true;
+    protected Entity(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
 
-    default void draw(Graphics g){
+    public void draw(Graphics g){
         g.drawImage(getSprite(), getX() * getWidth(), getY() * getHeight(), null);
     }
 
-    int getX();
+    public int getX() {
+        return x;
+    }
 
-    int getY();
 
-    int getWidth();
+    public int getY(){
+        return y;
+    }
 
-    int getHeight();
+    public int getWidth(){
+        return getSprite().getWidth(null);
+    }
 
-    Image getSprite();
+    public int getHeight(){
+        return getSprite().getHeight(null);
+    }
 
+    public abstract BufferedImage getSprite();
+    public void setSprite(String spriteName){
+        this.spriteName = spriteName;
+    }
+
+    public void setNotTraversableByPacMan() {
+        traversableByPacMan = false;
+    }
+
+    public boolean isTraversableByPacMan(){
+        return traversableByPacMan;
+    }
+
+    public void eat() {
+    }
 }

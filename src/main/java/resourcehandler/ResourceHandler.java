@@ -1,7 +1,6 @@
 package resourcehandler;
 
-import gamelogic.nonmoving.Food;
-import gamelogic.nonmoving.Wall;
+import gamelogic.Entity;
 import gui.Main;
 
 import javax.imageio.ImageIO;
@@ -9,86 +8,105 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.logging.Level;
 
 /**
  * This class handles the usage of resources (sprites, audio, etc.)
  */
-public class ResourceHandler {
-    private static final HashMap<String, BufferedImage> sprites = new HashMap<>();
+public final class ResourceHandler {
+
+    private static HashMap<String, HashMap<String, BufferedImage>> upperMap;
+    private static HashSet<String> entityTypes = new HashSet<>();
     private static Font pacFont;
-    private static Wall[][] currentLevel = null;
+    private static ArrayList<ArrayList<Entity>> currentLevel = null;
+    private static final float FONT_SIZE = 72F;
 
-    private static Food[][] currentFoods = null;
 
-
-    public void init(){
-        initSprites();
+    public static void init(){
         initFont();
+        initSpriteMaps();
     }
 
-    // Loads all the sprites from the res/sprites directory.
-    private static void initSprites(){
-        File workingDirectory = new File(System.getProperty("user.dir"));
-        File spriteDirectory = new File(workingDirectory, "res/sprites");
-        gatherAllSprites(spriteDirectory);
+    public static HashMap<String, BufferedImage> getSpriteMap(String entityType){
+        return upperMap.get(entityType);
     }
 
-    // Loads the custom font.
-    private static void initFont(){
-        try {
-            pacFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/emulogic.ttf")).deriveFont(72f);
-        } catch (Exception e) {
-            Main.logger.log(Level.WARNING, "Could not load custom font!");
-        }
-    }
-
-    // Recursively gets all the sprites from the given directory.
-    private static void gatherAllSprites(File dir) {
-        try {
-            File[] subdirs = dir.listFiles();
-            if(subdirs == null){
-                Main.logger.log(Level.SEVERE, "Sprites not found!");
-            }
-            for (File file : subdirs) {
-                if (file.isDirectory()) {
-                    gatherAllSprites(file);
-                } else {
-                    int neededIndex = file.getPath().indexOf("sprites") + 8;
-                    String spriteName = file.getPath().substring(neededIndex);
-                    sprites.put(spriteName, ImageIO.read(file));
-                }
-            }
-        } catch (Exception e) {
-            Main.logger.log(Level.WARNING, e.getMessage());
-        }
-    }
-    // Getters
-    public static HashMap<String, BufferedImage> getSprites() {
-        return sprites;
-    }
     public static Font getPacFont(){
         return pacFont;
     }
 
+    public static Image getIcon(String iconName){
+        File iconFile = new File("res/icons/"+iconName+".png");
+        BufferedImage icon;
+        try {
+            icon = ImageIO.read(iconFile);
+        } catch (IOException e) {
+            Main.logger.log(Level.WARNING, "Could not load icon: " + iconName, e);
+        }
+        return icon;
+    }
+
+    public static HashSet<String> getEntityTypes(){
+        return entityTypes;
+    }
+
+    private ResourceHandler(){}
+
+    private static void initFont(){
+        try {
+            pacFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/emulogic.ttf")).deriveFont(FONT_SIZE);
+        } catch (IOException | FontFormatException e) {
+            Main.logger.log(Level.WARNING, "Could not load custom font!", e);
+        }
+    }
+
+    private static void initSpriteMaps() {
+        upperMap = new HashMap<>();
+
+        File spriteDir = new File(System.getProperty("user.dir"), "res/sprites");
+        File[] subDirs = spriteDir.listFiles();
+
+        if(subDirs == null)
+            return;
+
+        for(File subDir : subDirs){
+            if(!subDir.isDirectory())
+                continue;
+            HashMap<String, BufferedImage> spriteMap = new HashMap<>();
+            for(File sprite : subDir.listFiles()){
+                String spriteName = sprite.getName().split("\\.")[0];
+                try {
+                    spriteMap.put(spriteName, ImageIO.read(sprite));
+                } catch (IOException e) {
+                    Main.logger.log(Level.SEVERE, "Could not load sprites!", e);
+                }
+            }
+            upperMap.put(subDir.getName(), spriteMap);
+            entityTypes.add(subDir.getName());
+        }
+    }
+    // Recursively gets all the sprites from the given directory.
+
     // Save level to a file
-    public static void saveLevel(String fileName, Wall[][] level) {
+    public static void saveLevel(String fileName, ArrayList<ArrayList<Entity>> level) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(level);
         } catch (Exception e) {
-            Main.logger.log(Level.WARNING, "Error occurred while saving level: " + e.getMessage());
+            Main.logger.log(Level.WARNING, "Error occurred while saving level: ", e);
         }
     }
 
     // Load level from a file
-    public static Wall[][] loadLevel(String fileName) {
+    public static ArrayList<ArrayList<Entity>> loadLevel(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-           return (Wall[][]) inputStream.readObject();
+           return (ArrayList<ArrayList<Entity>>) inputStream.readObject();
         } catch (Exception e) {
-            Main.logger.log(Level.WARNING, "Error occurred while loading level: " + e.getMessage());
+            Main.logger.log(Level.WARNING, "Error occurred while loading level: ", e);
         }
-        return new Wall[0][0];
+        return new ArrayList<>();
     }
 
     public static void levelSelectDialog(JComponent component){
@@ -97,29 +115,14 @@ public class ResourceHandler {
 
         int userSelection = fileChooser.showOpenDialog(component);
 
-
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             currentLevel = ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
         }
     }
 
-    public static Wall[][] getCurrentLevel(){
+    public static ArrayList<ArrayList<Entity>> getCurrentLevel(){
         return currentLevel;
     }
 
-    public static Food[][] createFoods(){
-        Food[][] foods = new Food[31][28];
-        for(int y = 0; y < 31; y++)
-            for(int x = 0; x < 28; x++){
-                if(currentLevel[y][x].isTraversableByPacMan())
-                    foods[y][x] = new Food(x,y);
-            }
-        currentFoods = foods;
-        return foods;
-    }
-
-    public static Food[][] getCurrentFoods() {
-        return currentFoods;
-    }
 }
