@@ -6,7 +6,6 @@ import utility.ShortestPathFinder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-//TODO: implement movement logic
 public class Blinky extends Ghost{
 
     public Blinky(int x, int y) {
@@ -28,7 +27,6 @@ public class Blinky extends Ghost{
 
     @Override
     public void move(){
-
         Point ghostLocation = new Point(getX(), getY());
         Point pacManLocation = new Point(pacManObserver.getPacManX(), pacManObserver.getPacManY());
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, pacManLocation);
