@@ -1,30 +1,35 @@
 package gui.game;
 
-import gamelogic.nonmoving.Food;
-import gamelogic.nonmoving.Wall;
-import gamelogic.pacman.PacMan;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import entities.moving.PacMan;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
+import java.util.ArrayList;
 /**
- * This class is responsible for everything concerning the game.
+ * This class is responsible for the visual representation of the game.
  */
 public class GamePanel extends JPanel {
-    private final Timer timer;
-    private final PacMan pacMan = new PacMan(14,1);
-    private Wall[][] level = ResourceHandler.getCurrentLevel();
-    private Food[][] foods = ResourceHandler.createFoods();
+    private PacMan pacMan;
+    private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+    private static final int TIMER_DELAY = 150;
+    private static final int SCREEN_WIDTH = 28*22;
+    private static final int SCREEN_HEIGHT = 31*22;
 
     public GamePanel() {
+        findPacMan();
+        addObservers();
         setBackground(Color.BLACK);
-
-        timer = new Timer(150, e -> {
+        Timer timer = new Timer(TIMER_DELAY, e -> {
             repaint();
-            pacMan.move();
+            for(ArrayList<Entity> yAxis : level){
+                for(Entity entity : yAxis){
+                    entity.move();
+                }
+            }
         });
         timer.start();
 
@@ -38,25 +43,45 @@ public class GamePanel extends JPanel {
         setFocusable(true);
     }
 
-    @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(28*22,31*22);
+    private void findPacMan(){
+        for(ArrayList<Entity> yAxis : level){
+            for(Entity entity : yAxis){
+                if(entity.isPacMan() != null)
+                    pacMan = entity.isPacMan();
+            }
+        }
     }
 
+    private void addObservers(){
+        for(ArrayList<Entity> yAxis : level){
+            for(Entity entity : yAxis){
+                if(entity.isGhost() != null)
+                    entity.isGhost().pacManObserverAdd(pacMan);
+            }
+        }
+    }
+
+    /**
+     * @return the preferred size of the panel
+     */
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT);
+    }
+
+    /**
+     * @param g  the <code>Graphics</code> context in which to paint
+     */
     @Override
     public void paint(Graphics g){
         super.paint(g);
-        for(Wall[] xAxis : level){
-            for(Wall w : xAxis){
-                w.draw(g);
+        for(ArrayList<Entity> yAxis : level){
+            for(Entity e : yAxis){
+                e.draw(g);
             }
         }
-        for(Food[] xAxis : foods)
-            for(Food f : xAxis)
-                if(f != null) {
-                    f.draw(g);
-                }
-        pacMan.draw(g);
-
     }
+
+
+
 }

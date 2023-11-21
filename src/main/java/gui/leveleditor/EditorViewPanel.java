@@ -1,91 +1,175 @@
 package gui.leveleditor;
 
-import gamelogic.nonmoving.Wall;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import entities.moving.ghosts.Blinky;
+import entities.moving.ghosts.Clyde;
+import entities.moving.ghosts.Inky;
+import entities.moving.ghosts.Pinky;
+import entities.nonmoving.Food;
+import entities.nonmoving.Wall;
+import entities.moving.PacMan;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 
 /**
- * This class is responsible for displaying the level in the level editor.
- * It is a 31*28 grid of JLabels, each of which can be clicked to change the wall sprite.
- * The level is represented by a 2D array of Wall objects.
- * The level can be saved to a file and loaded from a file.
+ *
+ * This class is responsible for the visual representation of the level editor
  */
 public class EditorViewPanel extends JPanel {
-    private final Wall[][] walls = new Wall[31][28];
-    private final JLabel[][] wallCells = new JLabel[31][28];
+    private final ArrayList<ArrayList<Entity>> entities = new ArrayList<>();
+    private final ArrayList<ArrayList<JLabel>> cells = new ArrayList<>();
+    private boolean pacManPlaced = false;
+    private boolean inkyPlaced = false;
+    private boolean blinkyPlaced = false;
+    private boolean pinkyPlaced = false;
+    private boolean clydePlaced = false;
+    private static final int COLUMN_COUNT = 28;
+    private static final int ROW_COUNT = 31;
+    private static final int CELL_SIZE = 22;
 
-    // Initialize the level editor view panel
+    /**
+     * Constructor for the level editor view panel
+     */
     public EditorViewPanel(){
-        initWalls();
+        initEntities();
         initCells();
-        setLayout(new GridLayout(31, 28));
+        setLayout(new GridLayout(ROW_COUNT, COLUMN_COUNT));
         setBackground(Color.BLACK);
     }
-    // Initialize the cells of the level editor view panel
+
+    /**
+     * Initialize the JLabels that represent the cells of the level editor view panel
+     */
     private void initCells(){
-        // Create 28*31 cells for the level
-        for(int i = 0; i < 31; i++){
-            for(int j = 0; j < 28; j++){
-                wallCells[i][j] = new JLabel();
-                wallCells[i][j].setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-                wallCells[i][j].setPreferredSize(new Dimension(22,22));
-                wallCells[i][j].setMinimumSize(new Dimension(22,22));
-                wallCells[i][j].setMaximumSize(new Dimension(22,22));
-                int finalI = i;
-                int finalJ = j;
-                wallCells[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        int col = wallCells[finalI][finalJ].getX() / wallCells[finalI][finalJ].getWidth();
-                        int row = wallCells[finalI][finalJ].getY() / wallCells[finalI][finalJ].getWidth();
-                        Wall editedWall = walls[row][col];
-                        if(LevelEditorFrame.getCurrentWallSprite() != null){
-                            // Terrible
-                            BufferedImage newIcon = ResourceHandler.getSprites()
-                                    .get(editedWall.getSpriteNames()
-                                            .get(LevelEditorFrame.getCurrentWallSprite()));
-                            if(LevelEditorFrame.getCurrentWallSprite().equals("pm-non-traverse")){
-                                editedWall.setSprite("empty");
-                                editedWall.setTraversableByPacMan(false);
-                            }else if(!LevelEditorFrame.getCurrentWallSprite().equals("empty")){
-                                editedWall.setSprite(LevelEditorFrame.getCurrentWallSprite());
-                                editedWall.setTraversableByPacMan(false);
-                                editedWall.setTraversableByGhosts(false);
-                            }else{
-                                editedWall.setSprite(LevelEditorFrame.getCurrentWallSprite());
+        Dimension cellSize = new Dimension(CELL_SIZE,CELL_SIZE);
+        // Create a 31row*28column grid of JLabels
+        for(int y = 0; y < ROW_COUNT; y++){
+            ArrayList<JLabel> rowLabels = new ArrayList<>();
+            for(int x = 0; x < COLUMN_COUNT; x++){
+                JLabel cell = new JLabel();
+                cell.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                cell.setPreferredSize(cellSize);
+                cell.setMinimumSize(cellSize);
+                cell.setMaximumSize(cellSize);
+                int finalX = x;
+                int finalY = y;
+                addClickHandler(cell, finalY, finalX);
+                rowLabels.add(finalX, cell);
+                add(cell);
+            }
+            cells.add(y, rowLabels);
+        }
+    }
+
+    /**
+     * Adds a mouse listener to a cell
+     * @param cell the cell to add the mouse listener to
+     * @param finalY the y coordinate of the cell
+     * @param finalX the x coordinate of the cell
+     */
+    private void addClickHandler(JLabel cell, int finalY, int finalX) {
+        cell.addMouseListener(new MouseAdapter() {
+            /**
+             * Invoked when a cell has been clicked on.
+             * @param e the event to be processed
+             */
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Entity editedEntity = entities.get(finalY).get(finalX);
+                if (LevelEditorFrame.getCurrentSprite() == null) {
+                    return;
+                }
+                String currentEntityType = LevelEditorFrame.getCurrentEntityType();
+                String currentSpriteName = LevelEditorFrame.getCurrentSprite();
+                BufferedImage newIcon = ResourceHandler.getSpriteMap(currentEntityType).get(currentSpriteName);
+                cell.setIcon(new ImageIcon(newIcon));
+                // Create a new entity based on the current entity type
+                switch (currentEntityType) {
+                    case "inky" -> {
+                        if (!inkyPlaced)
+                            editedEntity = new Inky(finalX, finalY);
+                        inkyPlaced = true;
+                    }
+                    case "blinky" -> {
+                        if (!blinkyPlaced)
+                            editedEntity = new Blinky(finalX, finalY);
+                        blinkyPlaced = true;
+                    }
+                    case "walls" -> {
+                        editedEntity = new Wall(finalX, finalY);
+                        editedEntity.setSprite(currentSpriteName);
+                        if(!currentSpriteName.equals("empty")){
+                            if(!currentSpriteName.equals("pm-non-traverse")) {
+                                editedEntity.setNotTraversableByGhosts();
                             }
-                            wallCells[row][col].setIcon(new ImageIcon(newIcon));
+                            editedEntity.setNotTraversableByPacMan();
                         }
                     }
-                });
-                add(wallCells[i][j]);
+                    case "clyde" -> {
+                        if (!clydePlaced)
+                            editedEntity = new Clyde(finalX, finalY);
+                        clydePlaced = true;
+                    }
+                    case "pinky" -> {
+                        if (!pinkyPlaced)
+                            editedEntity = new Pinky(finalX, finalY);
+                        pinkyPlaced = true;
+                    }
+                    case "pacman" -> {
+                        if (!pacManPlaced)
+                            editedEntity = new PacMan(finalX, finalY);
+                    }
+                }
+                entities.get(finalY).set(finalX, editedEntity);
             }
-        }
+        });
     }
-    // Initialize the walls of the level editor view panel
-    private void initWalls(){
-        for(int row = 0; row < 31; row++){
-            for(int col = 0; col < 28; col++){
-                walls[row][col] = new Wall(col, row);
+
+    /**
+     * Initializes the entity list with food entities
+     */
+    private void initEntities(){
+        for(int y = 0; y < ROW_COUNT; y++){
+            entities.add(new ArrayList<>());
+            for(int x = 0; x < COLUMN_COUNT; x++){
+                entities.get(y).add(new Food(x, y));
             }
         }
     }
 
-    // Getters and setters
-    public Wall[][] getWalls(){
-        return walls;
+    /**
+     * @return an ArrayList of ArrayLists of entities
+     */
+    public ArrayList<ArrayList<Entity>> getEntities(){
+        return entities;
     }
 
-    public void setWalls(Wall[][] walls){
-        for(int row = 0; row < 31; row++){
-            for(int col = 0; col < 28; col++){
-                this.walls[row][col] = walls[row][col];
-                this.wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getSprite()));
+    /**
+     * Loads the level into the level editor
+     * @param entities the entities to be loaded
+     */
+    public void loadEntities(ArrayList<ArrayList<Entity>> entities) {
+        this.entities.clear();
+        for (int y = 0; y < ROW_COUNT; y++) {
+            this.entities.add(new ArrayList<>());
+            for (int x = 0; x < COLUMN_COUNT; x++) {
+                this.entities.get(y).add(entities.get(y).get(x));
+                BufferedImage entitySprite = entities.get(y).get(x).getSprite();
+                BufferedImage emptyCell = ResourceHandler.getSpriteMap("walls").get("empty");
+                BufferedImage nonTraversableCell = ResourceHandler.getSpriteMap("walls").get("pm-non-traverse");
+                // check if the cell is a non-traversable empty cell
+                if(entitySprite.equals(emptyCell) && !entities.get(y).get(x).isTraversableByPacMan()) {
+                    cells.get(y).get(x).setIcon(new ImageIcon(nonTraversableCell));
+                } else {
+                    cells.get(y).get(x).setIcon(new ImageIcon(entitySprite));
+                }
             }
         }
     }
