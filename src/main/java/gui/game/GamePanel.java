@@ -2,6 +2,7 @@ package gui.game;
 
 import entities.Entity;
 import entities.moving.PacMan;
+import entities.moving.ghosts.Ghost;
 import utility.ResourceHandler;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
  */
 public class GamePanel extends JPanel {
     private PacMan pacMan;
+    private ArrayList<Ghost> ghosts = new ArrayList<>();
     private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
     private static final int TIMER_DELAY = 150;
     private static final int SCREEN_WIDTH = 28*22;
@@ -31,11 +33,13 @@ public class GamePanel extends JPanel {
                 }
             }
         });
-        timer.start();
 
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                if(!timer.isRunning()){
+                    timer.start();
+                }
                 pacMan.keyPressed(e);
             }
         });
@@ -48,16 +52,16 @@ public class GamePanel extends JPanel {
             for(Entity entity : yAxis){
                 if(entity.isPacMan() != null)
                     pacMan = entity.isPacMan();
+                if(entity.isGhost() != null)
+                    ghosts.add(entity.isGhost());
             }
         }
     }
 
     private void addObservers(){
-        for(ArrayList<Entity> yAxis : level){
-            for(Entity entity : yAxis){
-                if(entity.isGhost() != null)
-                    entity.isGhost().pacManObserverAdd(pacMan);
-            }
+        System.out.println(ghosts.size());
+        for(Ghost ghost : ghosts){
+            pacMan.addObserver(ghost);
         }
     }
 

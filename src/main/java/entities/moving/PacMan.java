@@ -1,15 +1,19 @@
 package entities.moving;
 
 import entities.Entity;
+import entities.moving.ghosts.Ghost;
 import utility.ResourceHandler;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * This class represents the PacMan entity
  */
 public class PacMan extends MovingEntity {
+    private ArrayList<Ghost> observers = new ArrayList<>();
     private static final int COLUMN_COUNT = 28;
     private static final int ROW_COUNT = 31;
 
@@ -20,7 +24,6 @@ public class PacMan extends MovingEntity {
      */
     public PacMan(int x, int y) {
         super(x ,y);
-
     }
 
     /**
@@ -40,6 +43,7 @@ public class PacMan extends MovingEntity {
         }
         if(e.isEdible())
             e.eatenBy(this);
+        notifyObservers();
     }
 
     /**
@@ -102,6 +106,16 @@ public class PacMan extends MovingEntity {
     @Override
     public PacMan isPacMan() {
         return this;
+    }
+
+    public void addObserver(Ghost ghost){
+        observers.add(ghost);
+    }
+
+    private void notifyObservers(){
+        for(Ghost ghost : observers){
+            ghost.update(new Point(x, y), currentDirection);
+        }
     }
 
 }
