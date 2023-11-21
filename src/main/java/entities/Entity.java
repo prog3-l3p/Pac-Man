@@ -1,6 +1,7 @@
-package gamelogic;
+package entities;
 
-import gamelogic.pacman.PacMan;
+import entities.moving.PacMan;
+import entities.moving.ghosts.Ghost;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ public abstract class Entity implements Serializable {
     protected int y;
     protected String spriteName;
     protected boolean traversableByPacMan = true;
+    protected boolean traversableByGhosts = true;
     protected Entity(int x, int y){
         this.x = x;
         this.y = y;
@@ -69,6 +71,10 @@ public abstract class Entity implements Serializable {
         traversableByPacMan = false;
     }
 
+    public void setNotTraversableByGhosts() {
+        traversableByGhosts = false;
+    }
+
     /**
      * @return Whether the entity is traversable by PacMan.
      */
@@ -76,13 +82,25 @@ public abstract class Entity implements Serializable {
         return traversableByPacMan;
     }
 
-    public void eat() {
+    public boolean isTraversableByGhosts(){
+        return traversableByGhosts;
+    }
+
+    public boolean isEdible() {
+        return false;
+    }
+
+    public void eatenBy(Entity e) {
     }
 
     public void move() {
     }
 
     public PacMan isPacMan() {
+        return null;
+    }
+
+    public Ghost isGhost() {
         return null;
     }
 }
