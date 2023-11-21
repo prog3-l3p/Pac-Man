@@ -1,8 +1,8 @@
 package gui.mainmenu;
 
-import gamelogic.Entity;
-import gamelogic.nonmoving.Food;
-import gamelogic.pacman.PacMan;
+import entities.Entity;
+import entities.nonmoving.Food;
+import entities.moving.PacMan;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,9 +18,10 @@ public class MenuPacAnimationPanel extends JPanel {
     public MenuPacAnimationPanel(){
         setBackground(Color.BLACK);
         initFoods();
-        Timer timer = new Timer(200, e -> {
+        pacMan.setInitialDirection("right");
+        Timer timer = new Timer(150, e -> {
             repaint();
-            pacMan.menuMove(this.getWidth() / pacMan.getWidth());
+            pacMan.menuMove(getWidth() / 22);
         });
         timer.start();
     }
@@ -45,14 +46,14 @@ public class MenuPacAnimationPanel extends JPanel {
 
     /**
      * Paints Pac-Man and the food entities
-     * @param g  the <code>Graphics</code> context in which to paint
+     * @param g the <code>Graphics</code> context in which to paint
      */
     @Override
     public void paint(Graphics g){
         super.paint(g);
         for(Entity e : foods){
             if(e.getX() == pacMan.getX()){
-                e.eat();
+                e.eatenBy(pacMan);
             }
             if(e.getX() > pacMan.getX()){
                 e.setSprite("food");

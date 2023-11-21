@@ -1,6 +1,6 @@
 package gui.game;
 
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 

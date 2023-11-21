@@ -1,6 +1,6 @@
 package gui.mainmenu;
 
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 

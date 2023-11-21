@@ -1,7 +1,7 @@
 package gui;
 
 import gui.mainmenu.MainMenuFrame;
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.util.logging.Logger;

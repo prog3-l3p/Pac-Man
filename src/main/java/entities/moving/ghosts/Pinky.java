@@ -1,11 +1,11 @@
-package gamelogic.ghosts;
+package entities.moving.ghosts;
 
-import gamelogic.Entity;
+import entities.Entity;
 
 import java.awt.image.BufferedImage;
 
-public class Clyde extends Entity {
-    public Clyde(int x, int y) {
+public class Pinky extends Entity  {
+    public Pinky(int x, int y) {
         super(x, y);
     }
 

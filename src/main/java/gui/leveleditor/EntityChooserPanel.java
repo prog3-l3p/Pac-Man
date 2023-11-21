@@ -1,6 +1,6 @@
 package gui.leveleditor;
 
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,9 +32,9 @@ public class EntityChooserPanel extends JPanel {
         JMenuBar menuBar = new JMenuBar();
         for(String entityType : ResourceHandler.getEntityTypes()){
             // User shouldn't be able to add edibles to the map because the game will do it for them.
-            // They also shouldn't be able to place frightened ghosts,
+            // They also shouldn't be able to place frightened or dead ghosts,
             // because it's an illegal state for them to start in.
-            if(entityType.equals("frightened") || entityType.equals("edibles")) continue;
+            if(entityType.equals("frightened") || entityType.equals("edibles") || entityType.equals("dead")) continue;
             JMenu entityMenu = new JMenu(entityType);
             for(String spriteName : ResourceHandler.getSpriteMap(entityType).keySet()){
                 JMenuItem spriteItem = new JMenuItem(spriteName);

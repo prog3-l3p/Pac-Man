@@ -1,7 +1,7 @@
-package gamelogic.pacman;
+package entities.moving;
 
-import gamelogic.Entity;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import utility.ResourceHandler;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -9,21 +9,9 @@ import java.awt.image.BufferedImage;
 /**
  * This class represents the PacMan entity
  */
-public class PacMan extends Entity {
-    private String currentDirection = NEUTRAL;
-    private int speedX;
-    private int speedY;
+public class PacMan extends MovingEntity {
     private static final int COLUMN_COUNT = 28;
     private static final int ROW_COUNT = 31;
-    private static final String NEUTRAL = "neutral";
-    private static final String LEFT_1 = "left_1";
-    private static final String LEFT_2 = "left_2";
-    private static final String RIGHT_1 = "right_1";
-    private static final String RIGHT_2 = "right_2";
-    private static final String UP_1 = "up_1";
-    private static final String UP_2 = "up_2";
-    private static final String DOWN_1 = "down_1";
-    private static final String DOWN_2 = "down_2";
 
     /**
      * Constructor for PacMan
@@ -32,7 +20,7 @@ public class PacMan extends Entity {
      */
     public PacMan(int x, int y) {
         super(x ,y);
-        setSprite(NEUTRAL);
+
     }
 
     /**
@@ -45,12 +33,13 @@ public class PacMan extends Entity {
     public void move(){
         if(x <= 0) {x += COLUMN_COUNT;}
         if(y <= 0) {y += ROW_COUNT;}
-        Entity e = ResourceHandler.getCurrentLevel().get((x + speedX) % COLUMN_COUNT).get((y + speedY) % ROW_COUNT);
+        Entity e = ResourceHandler.getCurrentLevel().get((y + speedY) % ROW_COUNT).get((x + speedX) % COLUMN_COUNT);
         if(e.isTraversableByPacMan()) {
             x = (x + speedX) % COLUMN_COUNT;
             y = (y + speedY) % ROW_COUNT;
         }
-        e.eat();
+        if(e.isEdible())
+            e.eatenBy(this);
     }
 
     /**
@@ -58,9 +47,12 @@ public class PacMan extends Entity {
      * @param screenWidth the width of the menu window
      */
     public void menuMove(int screenWidth){
-        currentDirection = "right";
-        if(x + 1 <= screenWidth) x += 1;
-        else x = 0;
+        if(x >= screenWidth) x = 0;
+        x += 1;
+    }
+
+    public void setInitialDirection(String direction){
+        currentDirection = direction;
     }
 
     /**
@@ -68,37 +60,7 @@ public class PacMan extends Entity {
      * @return the current sprite of PacMan
      */
     public BufferedImage getSprite(){
-        switch(currentDirection){
-            case "left" -> {
-                if(spriteName.equals(LEFT_1)){
-                    setSprite(LEFT_2);
-                } else {
-                    setSprite(LEFT_1);
-                }
-            }
-            case "right" -> {
-                if(spriteName.equals(RIGHT_1)){
-                    setSprite(RIGHT_2);
-                } else {
-                    setSprite(RIGHT_1);
-                }
-            }
-            case "up" -> {
-                if(spriteName.equals(UP_1)){
-                    setSprite(UP_2);
-                } else {
-                    setSprite(UP_1);
-                }
-            }
-            case "down" -> {
-                if(spriteName.equals(DOWN_1)){
-                    setSprite(DOWN_2);
-                } else {
-                    setSprite(DOWN_1);
-                }
-            }
-        }
-
+        getNextAnimation();
         return ResourceHandler.getSpriteMap("pacman").get(spriteName);
     }
 
@@ -141,4 +103,5 @@ public class PacMan extends Entity {
     public PacMan isPacMan() {
         return this;
     }
+
 }

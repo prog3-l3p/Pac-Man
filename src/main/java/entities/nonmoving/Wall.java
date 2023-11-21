@@ -1,7 +1,7 @@
-package gamelogic.nonmoving;
+package entities.nonmoving;
 
-import gamelogic.Entity;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import utility.ResourceHandler;
 
 import java.awt.image.BufferedImage;
 
@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 public class Wall extends Entity {
     public Wall(int x, int y){
         super(x, y);
-        super.setSprite("empty");
+        setSprite("empty");
     }
 
     @Override

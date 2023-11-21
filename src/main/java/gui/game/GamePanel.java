@@ -1,8 +1,8 @@
 package gui.game;
 
-import gamelogic.Entity;
-import gamelogic.pacman.PacMan;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import entities.moving.PacMan;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,16 +20,14 @@ public class GamePanel extends JPanel {
     private static final int SCREEN_HEIGHT = 31*22;
 
     public GamePanel() {
-        fixLevel();
+        findPacMan();
+        addObservers();
         setBackground(Color.BLACK);
-
         Timer timer = new Timer(TIMER_DELAY, e -> {
             repaint();
             for(ArrayList<Entity> yAxis : level){
                 for(Entity entity : yAxis){
                     entity.move();
-                    if(entity.isPacMan() != null)
-                        pacMan = entity.isPacMan();
                 }
             }
         });
@@ -43,6 +41,24 @@ public class GamePanel extends JPanel {
         });
 
         setFocusable(true);
+    }
+
+    private void findPacMan(){
+        for(ArrayList<Entity> yAxis : level){
+            for(Entity entity : yAxis){
+                if(entity.isPacMan() != null)
+                    pacMan = entity.isPacMan();
+            }
+        }
+    }
+
+    private void addObservers(){
+        for(ArrayList<Entity> yAxis : level){
+            for(Entity entity : yAxis){
+                if(entity.isGhost() != null)
+                    entity.isGhost().pacManObserverAdd(pacMan);
+            }
+        }
     }
 
     /**
@@ -66,18 +82,6 @@ public class GamePanel extends JPanel {
         }
     }
 
-    /**
-     * This method fixes the level so that it is loaded in the correct orientation
-     */
-    private void fixLevel(){
-        for (int i = 0; i < level.size(); i++) {
-            for (int j = i + 1; j < level.get(i).size(); j++) {
-                // Swap elements (i, j) and (j, i)
-                Entity temp = level.get(i).get(j);
-                level.get(i).set(j, level.get(j).get(i));
-                level.get(j).set(i, temp);
-            }
-        }
-    }
+
 
 }

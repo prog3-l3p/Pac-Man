@@ -1,7 +1,7 @@
-package gamelogic.nonmoving;
+package entities.nonmoving;
 
-import gamelogic.Entity;
-import resourcehandler.ResourceHandler;
+import entities.Entity;
+import utility.ResourceHandler;
 
 import java.awt.image.BufferedImage;
 /**
@@ -23,7 +23,12 @@ public class Food extends Entity {
     }
 
     @Override
-    public void eat(){
+    public boolean isEdible(){
+        return true;
+    }
+
+    @Override
+    public void eatenBy(Entity e){
         setSprite("none");
     }
 }

@@ -3,7 +3,7 @@ package gui.mainmenu;
 import gui.Main;
 import gui.game.GameFrame;
 import gui.leveleditor.LevelEditorFrame;
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +40,7 @@ public class MainMenuPanel extends JPanel {
      * Creates the panel responsible for the menu animation
      */
     private void createPacPanel(){
-        JPanel pacPanel = new MenuPacAnimationPanel();
+        MenuPacAnimationPanel pacPanel = new MenuPacAnimationPanel();
         add(pacPanel, BorderLayout.CENTER);
     }
 

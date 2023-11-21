@@ -1,6 +1,6 @@
-package resourcehandler;
+package utility;
 
-import gamelogic.Entity;
+import entities.Entity;
 import gui.Main;
 
 import javax.imageio.ImageIO;

@@ -1,9 +1,9 @@
 package gui.leveleditor;
 
-import gamelogic.Entity;
+import entities.Entity;
 import gui.Main;
 import gui.mainmenu.MainMenuFrame;
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;

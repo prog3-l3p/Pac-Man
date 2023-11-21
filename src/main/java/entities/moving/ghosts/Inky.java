@@ -1,6 +1,6 @@
-package gamelogic.ghosts;
+package entities.moving.ghosts;
 
-import gamelogic.Entity;
+import entities.Entity;
 
 import java.awt.image.BufferedImage;
 
