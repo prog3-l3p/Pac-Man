@@ -23,8 +23,9 @@ public class GamePanel extends JPanel {
     private final ArrayList<Ghost> ghosts = new ArrayList<>();
     private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
     private final HashMap<String, Point> locations = ResourceHandler.getInitialLocations();
+    private final transient EntityObserver observer = new EntityObserver();
 
-    private EntityObserver observer = new EntityObserver();
+
     public GamePanel() {
         JLabel scoreLabel = new JLabel();
         setBackground(Color.BLACK);
@@ -109,6 +110,7 @@ public class GamePanel extends JPanel {
             }
         }
     }
+
 
 
 
