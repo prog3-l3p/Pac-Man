@@ -1,30 +1,24 @@
 package gui.game;
 
-import entities.Entity;
-import entities.moving.PacMan;
-import utility.ResourceHandler;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 /**
  * This class is responsible for the visual representation of the game.
  */
 public class GamePanel extends JPanel {
     private PacMan pacMan;
+    private final ArrayList<Ghost> ghosts = new ArrayList<>();
     private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
-    private static final int TIMER_DELAY = 150;
-    private static final int SCREEN_WIDTH = 28*22;
-    private static final int SCREEN_HEIGHT = 31*22;
+    private final HashMap<String, Point> locations = ResourceHandler.getInitialLocations();
 
+    private EntityObserver observer = new EntityObserver();
     public GamePanel() {
-        findPacMan();
+        JLabel scoreLabel = new JLabel();
+        scoreLabel.setForeground(Color.WHITE);
+        add(scoreLabel);
+        initEntities();
         addObservers();
-        setBackground(Color.BLACK);
         Timer timer = new Timer(TIMER_DELAY, e -> {
             repaint();
+            scoreLabel.setText("Score: " + observer.getScore());
             for(ArrayList<Entity> yAxis : level){
                 for(Entity entity : yAxis){
                     entity.move();
@@ -43,20 +37,39 @@ public class GamePanel extends JPanel {
         setFocusable(true);
     }
 
-    private void findPacMan(){
-        for(ArrayList<Entity> yAxis : level){
-            for(Entity entity : yAxis){
-                if(entity.isPacMan() != null)
-                    pacMan = entity.isPacMan();
-            }
-        }
+    private void initEntities(){
+        // Initialize PacMan and the ghosts
+        // could be better...
+        pacMan = new PacMan(locations.get("pacman").x, locations.get("pacman").y);
+        level.get(pacMan.getY()).set(pacMan.getX(), pacMan);
+
+        Blinky blinky = new Blinky(locations.get("blinky").x, locations.get("blinky").y);
+        level.get(blinky.getY()).set(blinky.getX(), blinky);
+
+        Inky inky = new Inky(locations.get("inky").x, locations.get("inky").y);
+        inky.setObservedBlinky(blinky);
+        level.get(inky.getY()).set(inky.getX(), inky);
+
+        Pinky pinky = new Pinky(locations.get("pinky").x, locations.get("pinky").y);
+        level.get(pinky.getY()).set(pinky.getX(), pinky);
+
+        Clyde clyde = new Clyde(locations.get("clyde").x, locations.get("clyde").y);
+        level.get(clyde.getY()).set(clyde.getX(), clyde);
+
+        ghosts.add(blinky);
+        ghosts.add(inky);
+        ghosts.add(pinky);
+        ghosts.add(clyde);
+
     }
 
     private void addObservers(){
+        for(Ghost ghost : ghosts){
+            pacMan.addObserver(ghost);
+        }
         for(ArrayList<Entity> yAxis : level){
-            for(Entity entity : yAxis){
-                if(entity.isGhost() != null)
-                    entity.isGhost().pacManObserverAdd(pacMan);
+            for(Entity e : yAxis){
+                e.addObserver(observer);
             }
         }
     }

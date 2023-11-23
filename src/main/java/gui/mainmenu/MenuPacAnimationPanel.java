@@ -1,8 +1,10 @@
 package gui.mainmenu;
 
-import entities.Entity;
-import entities.nonmoving.Food;
-import entities.moving.PacMan;
+
+import gamelogic.pacman.PacMan;
+import gamelogic.entities.Entity;
+import gamelogic.entities.nonmoving.Food;
+import gamelogic.entities.moving.PacMan;
 
 import javax.swing.*;
 import java.awt.*;

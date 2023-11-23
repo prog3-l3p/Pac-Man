@@ -1,6 +1,7 @@
 package utility;
 
-import entities.Entity;
+import gamelogic.entities.Entity;
+import gamelogic.LevelData;
 import gui.Main;
 
 import javax.imageio.ImageIO;
@@ -21,7 +22,7 @@ public final class ResourceHandler {
     private static HashMap<String, HashMap<String, BufferedImage>> upperMap;
     private static final HashSet<String> entityTypes = new HashSet<>();
     private static Font pacFont;
-    private static ArrayList<ArrayList<Entity>> currentLevel = null;
+    private static LevelData currentLevel = null;
     private static final float FONT_SIZE = 72F;
 
     /**
@@ -74,9 +75,9 @@ public final class ResourceHandler {
      * @param fileName the name of the file
      * @param level the level to be saved
      */
-    public static void saveLevel(String fileName, ArrayList<ArrayList<Entity>> level) {
+    public static void saveLevel(String fileName, LevelData levelData) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
-            outputStream.writeObject(level);
+            outputStream.writeObject(levelData);
         } catch (Exception e) {
             Main.logger.log(Level.WARNING, "Error occurred while saving level: ", e);
         }
@@ -88,13 +89,13 @@ public final class ResourceHandler {
      * @param fileName the name of the file
      * @return the level that was loaded
      */
-    public static ArrayList<ArrayList<Entity>> loadLevel(String fileName) {
+    public static LevelData loadLevel(String fileName) {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
-           return (ArrayList<ArrayList<Entity>>) inputStream.readObject();
+           return (LevelData) inputStream.readObject();
         } catch (Exception e) {
             Main.logger.log(Level.WARNING, "Error occurred while loading level: ", e);
         }
-        return new ArrayList<>();
+        return new LevelData(new ArrayList<>(), new HashMap<>());
     }
 
     /**
@@ -117,7 +118,11 @@ public final class ResourceHandler {
      * @return the current level
      */
     public static ArrayList<ArrayList<Entity>> getCurrentLevel(){
-        return currentLevel;
+        return currentLevel.getEntities();
+    }
+
+    public static HashMap<String, Point> getInitialLocations(){
+        return currentLevel.getLocations();
     }
 
     /**

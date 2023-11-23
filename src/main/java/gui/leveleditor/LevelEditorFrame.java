@@ -1,5 +1,7 @@
 package gui.leveleditor;
 
+
+import gamelogic.LevelData;
 import entities.Entity;
 import gui.Main;
 import gui.mainmenu.MainMenuFrame;
@@ -98,10 +100,10 @@ public class LevelEditorFrame extends JFrame {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             switch (title) {
-                case SAVE_LEVEL -> ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getEntities());
+                case SAVE_LEVEL -> ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getLevelData());
                 case LOAD_LEVEL -> {
-                    ArrayList<ArrayList<Entity>> level =  ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
-                    viewPanel.loadEntities(level);
+                    LevelData level =  ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
+                    viewPanel.loadEntities(level.getEntities(), level.getLocations());
                 }
                 default -> Main.logger.log(Level.WARNING, "Unexpected error while performing file operation.");
             }

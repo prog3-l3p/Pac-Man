@@ -5,13 +5,12 @@ import utility.ResourceHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
+import static utility.GameConstants.CELL_SIZE;
 /**
  *
  */
 public class EntityChooserPanel extends JPanel {
     static JLabel currentEntityPanel = new JLabel();
-    private static final int CELL_SIZE = 22;
     public EntityChooserPanel(){
         setLayout(new FlowLayout());
         createMenu();
@@ -34,7 +33,7 @@ public class EntityChooserPanel extends JPanel {
             // User shouldn't be able to add edibles to the map because the game will do it for them.
             // They also shouldn't be able to place frightened or dead ghosts,
             // because it's an illegal state for them to start in.
-            if(entityType.equals("frightened") || entityType.equals("edibles") || entityType.equals("dead")) continue;
+            if(entityType.equals("frightened") || entityType.equals("dead")) continue;
             JMenu entityMenu = new JMenu(entityType);
             for(String spriteName : ResourceHandler.getSpriteMap(entityType).keySet()){
                 JMenuItem spriteItem = new JMenuItem(spriteName);
