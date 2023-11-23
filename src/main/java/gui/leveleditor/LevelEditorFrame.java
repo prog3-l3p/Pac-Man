@@ -2,7 +2,6 @@ package gui.leveleditor;
 
 
 import gamelogic.LevelData;
-import entities.Entity;
 import gui.Main;
 import gui.mainmenu.MainMenuFrame;
 import utility.ResourceHandler;

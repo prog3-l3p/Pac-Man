@@ -4,6 +4,8 @@ public final class GameConstants {
     public static final int ROW_COUNT = 31;
     public static final int COLUMN_COUNT = 28;
     public static final int CELL_SIZE = 22;
+
+    public static final int TIMER_DELAY = 100;
     public static final String PACMAN = "pacman";
     public static final String BLINKY = "blinky";
     public static final String INKY = "inky";

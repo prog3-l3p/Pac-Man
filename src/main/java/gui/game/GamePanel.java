@@ -1,5 +1,20 @@
 package gui.game;
 
+import gamelogic.EntityObserver;
+import gamelogic.entities.Entity;
+import gamelogic.entities.moving.PacMan;
+import gamelogic.entities.moving.ghosts.*;
+import utility.ResourceHandler;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import static utility.GameConstants.*;
+
 /**
  * This class is responsible for the visual representation of the game.
  */
@@ -12,6 +27,7 @@ public class GamePanel extends JPanel {
     private EntityObserver observer = new EntityObserver();
     public GamePanel() {
         JLabel scoreLabel = new JLabel();
+        setBackground(Color.BLACK);
         scoreLabel.setForeground(Color.WHITE);
         add(scoreLabel);
         initEntities();
@@ -19,10 +35,9 @@ public class GamePanel extends JPanel {
         Timer timer = new Timer(TIMER_DELAY, e -> {
             repaint();
             scoreLabel.setText("Score: " + observer.getScore());
-            for(ArrayList<Entity> yAxis : level){
-                for(Entity entity : yAxis){
-                    entity.move();
-                }
+            pacMan.move();
+            for(Ghost ghost : ghosts){
+                ghost.move();
             }
         });
         timer.start();
@@ -79,7 +94,7 @@ public class GamePanel extends JPanel {
      */
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(SCREEN_WIDTH,SCREEN_HEIGHT);
+        return new Dimension(COLUMN_COUNT * CELL_SIZE,ROW_COUNT * CELL_SIZE);
     }
 
     /**

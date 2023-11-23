@@ -4,7 +4,6 @@ import gamelogic.entities.Entity;
 import gamelogic.entities.moving.ghosts.Ghost;
 import utility.ResourceHandler;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -27,6 +26,7 @@ public class PacMan extends MovingEntity {
      */
     public PacMan(int x, int y) {
         super(x ,y);
+        currentDirection = "right";
     }
 
     /**

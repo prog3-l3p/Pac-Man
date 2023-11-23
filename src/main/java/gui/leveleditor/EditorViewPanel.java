@@ -101,7 +101,7 @@ public class EditorViewPanel extends JPanel {
                 // For moving entities, set their location in the locations hashmap
                 switch (currentEntityType) {
                     case INKY -> {
-                        if(inkyPlaced){
+                        if (inkyPlaced) {
                             int oldX = locations.get(INKY).x;
                             int oldY = locations.get(INKY).y;
                             entities.get(oldY).set(oldX, new Food(oldX, oldY));
@@ -112,7 +112,7 @@ public class EditorViewPanel extends JPanel {
                         inkyPlaced = true;
                     }
                     case BLINKY -> {
-                        if (blinkyPlaced){
+                        if (blinkyPlaced) {
                             int oldX = locations.get(BLINKY).x;
                             int oldY = locations.get(BLINKY).y;
                             entities.get(oldY).set(oldX, new Food(oldX, oldY));
@@ -123,7 +123,7 @@ public class EditorViewPanel extends JPanel {
                         blinkyPlaced = true;
                     }
                     case CLYDE -> {
-                        if(clydePlaced){
+                        if (clydePlaced) {
                             int oldX = locations.get(CLYDE).x;
                             int oldY = locations.get(CLYDE).y;
                             entities.get(oldY).set(oldX, new Food(oldX, oldY));
@@ -133,8 +133,8 @@ public class EditorViewPanel extends JPanel {
                         editedEntity = new Clyde(finalX, finalY);
                         clydePlaced = true;
                     }
-                    case PINKY-> {
-                        if(pinkyPlaced){
+                    case PINKY -> {
+                        if (pinkyPlaced) {
                             int oldX = locations.get("pinky").x;
                             int oldY = locations.get("pinky").y;
                             entities.get(oldY).set(oldX, new Food(oldX, oldY));
@@ -145,7 +145,7 @@ public class EditorViewPanel extends JPanel {
                         pinkyPlaced = true;
                     }
                     case PACMAN -> {
-                        if(pacManPlaced){
+                        if (pacManPlaced) {
                             int oldX = locations.get(PACMAN).x;
                             int oldY = locations.get(PACMAN).y;
                             entities.get(oldY).set(oldX, new Food(oldX, oldY));
@@ -158,8 +158,8 @@ public class EditorViewPanel extends JPanel {
                     case "walls" -> {
                         editedEntity = new Wall(finalX, finalY);
                         editedEntity.setSprite(currentSpriteName);
-                        if(!currentSpriteName.equals("empty")){
-                            if(!currentSpriteName.equals("pm-non-traverse")) {
+                        if (!currentSpriteName.equals("empty")) {
+                            if (!currentSpriteName.equals("pm-non-traverse")) {
                                 editedEntity.setNotTraversableByGhosts();
                             }
                             editedEntity.setNotTraversableByPacMan();
@@ -171,6 +171,8 @@ public class EditorViewPanel extends JPanel {
                     }
                 }
                 entities.get(finalY).set(finalX, editedEntity);
+            }
+        });
     }
 
     /**

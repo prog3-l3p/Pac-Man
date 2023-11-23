@@ -33,16 +33,7 @@ public class Inky extends Ghost {
 
     @Override
     public void move() {
-        Point pacManPlusTwo = switch (pacManDirection){
-            case "up" -> new Point(pacManLocation.x, pacManLocation.y - 2);
-            case "left" -> new Point(pacManLocation.x - 2, pacManLocation.y);
-            case "down" -> new Point(pacManLocation.x, pacManLocation.y + 2);
-            case "right" -> new Point(pacManLocation.x + 2, pacManLocation.y);
-            default -> throw new IllegalStateException("Unexpected value: " + pacManDirection);
-        };
-
-        Point blinkyLocation = new Point(observedBlinky.getX(), observedBlinky.getY());
-        Point target = new Point((pacManPlusTwo.x - blinkyLocation.x) * 2, (pacManPlusTwo.y - blinkyLocation.y) * 2);
+        final Point target = getTarget();
 
         Point ghostLocation = new Point(getX(), getY());
         // Make sure ambush location is within the bounds of the map
@@ -70,6 +61,21 @@ public class Inky extends Ghost {
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, new Point(26, 29));
         x = nextCell.x % COLUMN_COUNT;
         y = nextCell.y % ROW_COUNT;
+    }
+
+    private Point getTarget() {
+        System.out.println("PacMan location: " + pacManLocation);
+        System.out.println("PacMan direction: " + pacManDirection);
+        Point pacManPlusTwo = switch (pacManDirection){
+            case "up" -> new Point(pacManLocation.x, pacManLocation.y - 2);
+            case "left" -> new Point(pacManLocation.x - 2, pacManLocation.y);
+            case "down" -> new Point(pacManLocation.x, pacManLocation.y + 2);
+            case "right" -> new Point(pacManLocation.x + 2, pacManLocation.y);
+            default -> throw new IllegalStateException("Unexpected value: " + pacManDirection);
+        };
+
+        Point blinkyLocation = new Point(observedBlinky.getX(), observedBlinky.getY());
+        return new Point((pacManPlusTwo.x - blinkyLocation.x) * 2, (pacManPlusTwo.y - blinkyLocation.y) * 2);
     }
 
     public void setObservedBlinky(Blinky observedBlinky){
