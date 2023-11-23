@@ -9,7 +9,6 @@ import utility.ResourceHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.logging.Level;
 
 
@@ -93,13 +92,18 @@ public class LevelEditorFrame extends JFrame {
         switch(title) {
             case SAVE_LEVEL -> userSelection = fileChooser.showSaveDialog(this);
             case LOAD_LEVEL -> userSelection = fileChooser.showOpenDialog(this);
-            default -> Main.logger.log(Level.WARNING, "Unexpected error.");
+            default -> Main.logger.log(Level.SEVERE, "Unexpected error.");
         }
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             switch (title) {
-                case SAVE_LEVEL -> ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getLevelData());
+                case SAVE_LEVEL -> {
+                    if(validLevel())
+                        ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getLevelData());
+                    else
+                        JOptionPane.showMessageDialog(this, "Invalid level. Please make sure that there is exactly one PacMan, one Blinky, one Pinky, one Inky, and one Clyde.");
+                }
                 case LOAD_LEVEL -> {
                     LevelData level =  ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
                     viewPanel.loadEntities(level.getEntities(), level.getLocations());
@@ -107,5 +111,13 @@ public class LevelEditorFrame extends JFrame {
                 default -> Main.logger.log(Level.WARNING, "Unexpected error while performing file operation.");
             }
         }
+    }
+
+    /**
+     * Checks the levels validity
+     * @return true if there are 4 ghosts and 1 PacMan, false otherwise
+     */
+    private boolean validLevel(){
+        return viewPanel.getLevelData().getLocations().size() == 5;
     }
 }

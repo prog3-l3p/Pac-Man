@@ -25,13 +25,12 @@ import static utility.GameConstants.*;
 
 /**
  *
- * This class is responsible for the visual representation of the level editor
+ * This class is responsible for the visual representation and logic of the level editor
  */
 public class EditorViewPanel extends JPanel {
     private final ArrayList<ArrayList<Entity>> entities = new ArrayList<>();
     private final ArrayList<ArrayList<JLabel>> cells = new ArrayList<>();
     private HashMap<String, Point> locations = new HashMap<>();
-
     private boolean pacManPlaced = false;
     private boolean inkyPlaced = false;
     private boolean blinkyPlaced = false;
@@ -188,10 +187,18 @@ public class EditorViewPanel extends JPanel {
     }
 
     /**
-     * @return an ArrayList of ArrayLists of entities
+     * @return the level data of the level editor
      */
     public LevelData getLevelData(){
-        return new LevelData(entities, locations);
+        int foodCount = 0;
+        for(ArrayList<Entity> yAxis : entities){
+            for(Entity e : yAxis){
+                if(ResourceHandler.getSpriteMap("edibles").containsValue(e.getSprite())){
+                    foodCount++;
+                }
+            }
+        }
+        return new LevelData(entities, locations, foodCount);
     }
     /**
      * Loads the level into the level editor

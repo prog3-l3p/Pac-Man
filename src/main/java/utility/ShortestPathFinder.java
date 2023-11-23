@@ -34,7 +34,7 @@ public final class ShortestPathFinder {
                 return path.get(1);
             }
 
-            for (Point neighbor : getNeighbours(lastPoint)) {
+            for (Point neighbor : getValidNeighbours(lastPoint)) {
                 if (!discovered.contains(neighbor)) {
                     LinkedList<Point> newPath = new LinkedList<>(path);
                     newPath.add(neighbor);
@@ -52,10 +52,9 @@ public final class ShortestPathFinder {
      * @param p the <code>Point</code> for which we want to get the neighbours of
      * @return a list of neighbours
      */
-    private static LinkedList<Point> getNeighbours(Point p){
+    private static LinkedList<Point> getValidNeighbours(Point p){
         ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
         LinkedList<Point> neighbors = new LinkedList<>();
-        // level.get(p.y).get(p.x)......
         if(p.x > 0 &&level.get(p.y).get(p.x - 1).isTraversableByGhosts()){
             neighbors.add(new Point(p.x - 1, p.y));
         }

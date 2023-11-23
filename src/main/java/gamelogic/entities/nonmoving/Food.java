@@ -14,20 +14,27 @@ public class Food extends Entity {
         setSprite("food");
     }
 
+    /**
+     * Gets the sprite of the food entity
+     * @return The sprite of the food entity
+     */
     public BufferedImage getSprite(){
         return ResourceHandler.getSpriteMap("edibles").get(spriteName);
     }
 
-    @Override
-    public boolean isTraversableByPacMan() {
-        return true;
-    }
-
+    /**
+     * Checks if the food entity is edible
+     * @return Always true
+     */
     @Override
     public boolean isEdible(){
         return true;
     }
 
+    /**
+     * Eats the food entity
+     * @param pacMan The PacMan that eats the food entity
+     */
     @Override
     public void eatenBy(PacMan pacMan){
         int score = switch(spriteName){
@@ -40,8 +47,9 @@ public class Food extends Entity {
         if(score == 50){
             pacMan.setCanEatGhosts(true);
         }
-        if(observer != null){
-            observer.addScore(score);
+        if(!spriteName.equals("none") && (observer != null)){
+                observer.addScore(score);
+                observer.incrementEaten();
         }
         setSprite("none");
     }

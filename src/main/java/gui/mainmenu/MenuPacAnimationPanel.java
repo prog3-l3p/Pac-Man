@@ -9,6 +9,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static utility.GameConstants.CELL_SIZE;
+import static utility.GameConstants.TIMER_DELAY;
+
 /**
  * This class is responsible for the Pac-Man animation in the main menu.
  */
@@ -16,13 +19,16 @@ public class MenuPacAnimationPanel extends JPanel {
     private final PacMan pacMan = new PacMan(0, 0);
     ArrayList<Entity> foods = new ArrayList<>();
 
+    /**
+     * Constructor
+     */
     public MenuPacAnimationPanel(){
         setBackground(Color.BLACK);
         initFoods();
         pacMan.setInitialDirection("right");
-        Timer timer = new Timer(150, e -> {
+        Timer timer = new Timer(TIMER_DELAY, e -> {
             repaint();
-            pacMan.menuMove(getWidth() / 22);
+            pacMan.menuMove(getWidth() / CELL_SIZE);
         });
         timer.start();
     }

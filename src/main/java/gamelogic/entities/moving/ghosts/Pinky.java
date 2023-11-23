@@ -11,33 +11,48 @@ import java.util.ArrayList;
 import static utility.GameConstants.COLUMN_COUNT;
 import static utility.GameConstants.ROW_COUNT;
 
+/**
+ * This class represents Pinky
+ */
 public class Pinky extends Ghost  {
+    /**
+     * Constructor for Pinky
+     * @param x x-coordinate
+     * @param y y-coordinate
+     */
     public Pinky(int x, int y) {
         super(x, y);
         setSprite(RIGHT_1);
     }
 
+    /**
+     * Gets the sprite for Pinky
+     * @return current sprite
+     */
     @Override
     public BufferedImage getSprite() {
         getNextAnimation();
+        // If Pinky is frightened, return the frightened sprite
         if(isFrightened){
             return ResourceHandler.getSpriteMap("frightened").get(spriteName);
+        // If Pinky is dead, return the dead sprite
+        } else if (isDead){
+            return ResourceHandler.getSpriteMap("dead").get(spriteName);
+        // Otherwise, return the normal sprite
+        } else {
+            return ResourceHandler.getSpriteMap("pinky").get(spriteName);
         }
-        return ResourceHandler.getSpriteMap("pinky").get(spriteName);
     }
 
     @Override
-    public boolean isTraversableByPacMan() {
-        return true;
-    }
-
-
     public void move(){
         Point ghostLocation = new Point(getX(), getY());
         Point ambushLocation;
 
+        // If PacMan is moving towards Pinky, target the tile behind Pinky
         if (isPacManMovingTowardsPinky()) {
             ambushLocation = getTileBehindPinky();
+        // Otherwise, target the tile 4 cells in front of PacMan
         } else {
             ambushLocation = switch (pacManDirection){
                 case "up" -> new Point((pacManLocation.x) % COLUMN_COUNT, (pacManLocation.y - 4) % ROW_COUNT);
@@ -56,6 +71,7 @@ public class Pinky extends Ghost  {
 
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, ambushLocation);
 
+        // Calculate direction
         int xDiff = nextCell.x - getX();
         int yDiff = nextCell.y - getY();
 
@@ -69,24 +85,44 @@ public class Pinky extends Ghost  {
             currentDirection = "up";
         }
 
+        // If Pinky is frightened, move towards the top left corner
         if(isFrightened)
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, new Point(1, 1));
+        // If Pinky is dead, move towards the starting location
+        if(isDead)
+            nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
 
+        // Update location
         x = nextCell.x % COLUMN_COUNT;
         y = nextCell.y % ROW_COUNT;
 
 
     }
 
+    /**
+     * Makes sure the ambush location is within the bounds of the map
+     * @param ambushLocation the ambush location
+     */
     private void boundCheckAmbushLocation(Point ambushLocation){
+        // Adjust ambush location if it is out of bounds
         while(ambushLocation.x <= 0) ambushLocation.x += 1;
         while(ambushLocation.y <= 0) ambushLocation.y += 1;
         while(ambushLocation.x >= COLUMN_COUNT) ambushLocation.x -= 1;
         while(ambushLocation.y >= ROW_COUNT) ambushLocation.y -= 1;
     }
 
+    /**
+     * Makes sure the ambush location is traversable
+     * @param ambushLocation the ambush location
+     */
     private void traverseCheckAmbushLocation(Point ambushLocation){
         ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+
+        // Needed to prevent infinite loop
+        int maxIterations = ROW_COUNT * COLUMN_COUNT;
+        int iterations = 0;
+
+        // If the ambush location is out of bounds, fall back to Blinky's behaviour
         if(ambushLocation.x < 0 || ambushLocation.x >= COLUMN_COUNT || ambushLocation.y < 0 || ambushLocation.y >= ROW_COUNT){
             ambushLocation = ShortestPathFinder.findNextCellForShortestPath(new Point(getX(), getY()), pacManLocation);
         }
@@ -94,21 +130,32 @@ public class Pinky extends Ghost  {
             // If the ambush location is already traversable, return without making any changes
             return;
         }
-        while(!level.get(ambushLocation.y).get(ambushLocation.x).isTraversableByGhosts()) {
+        while(!level.get(ambushLocation.y).get(ambushLocation.x).isTraversableByGhosts() && iterations < maxIterations) {
             // If the current location is not traversable, move the ambush location one step towards the ghost
-            if (ambushLocation.x < getX()) ambushLocation.x += 1;
-            else if (ambushLocation.x > getX()) ambushLocation.x -= 1;
-            if (ambushLocation.y < getY()) ambushLocation.y += 1;
-            else if (ambushLocation.y > getY()) ambushLocation.y -= 1;
-
+            if (ambushLocation.x < getX())
+                ambushLocation.x += 1;
+            else if (ambushLocation.x > getX())
+                ambushLocation.x -= 1;
+            else if (ambushLocation.y < getY())
+                ambushLocation.y += 1;
+            else if (ambushLocation.y > getY())
+                ambushLocation.y -= 1;
+            // Do nothing
+            else {
+            }
             // Check if the new ambush location is out of bounds
             if (ambushLocation.x < 0 || ambushLocation.x >= level.get(0).size() || ambushLocation.y < 0 || ambushLocation.y >= level.size()) {
                 // If the new ambush location is out of bounds, return without making any changes
                 return;
             }
+            iterations++;
         }
     }
 
+    /**
+     * Gets the tile behind Pinky
+     * @return the tile behind Pinky
+     */
     private Point getTileBehindPinky() {
         return switch (currentDirection){
             case "up" -> new Point((getX()) % COLUMN_COUNT, (getY() + 2) % ROW_COUNT);
@@ -119,6 +166,10 @@ public class Pinky extends Ghost  {
         };
     }
 
+    /**
+     * Checks if PacMan is moving towards Pinky
+     * @return true if PacMan is moving towards Pinky, false otherwise
+     */
     private boolean isPacManMovingTowardsPinky() {
         if(currentDirection.equals("up") && pacManDirection.equals("down")) return true;
         if(currentDirection.equals("down") && pacManDirection.equals("up")) return true;

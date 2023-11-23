@@ -9,6 +9,9 @@ import java.awt.*;
  * GameFrame class
  */
 public class GameFrame extends JFrame {
+    /**
+     * Constructor
+     */
     public GameFrame(){
         super("Pac-Man");
         setLayout(new BorderLayout());

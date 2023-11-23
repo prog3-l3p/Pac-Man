@@ -3,6 +3,7 @@ package utility;
 import gamelogic.entities.Entity;
 import gamelogic.LevelData;
 import gui.Main;
+import gui.mainmenu.MainMenuFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -73,13 +74,13 @@ public final class ResourceHandler {
     /**
      * Save level to a file
      * @param fileName the name of the file
-     * @param level the level to be saved
+     * @param levelData the level to be saved
      */
     public static void saveLevel(String fileName, LevelData levelData) {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
             outputStream.writeObject(levelData);
         } catch (Exception e) {
-            Main.logger.log(Level.WARNING, "Error occurred while saving level: ", e);
+            Main.logger.log(Level.SEVERE, "Error occurred while saving level: ", e);
         }
     }
 
@@ -93,9 +94,10 @@ public final class ResourceHandler {
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
            return (LevelData) inputStream.readObject();
         } catch (Exception e) {
-            Main.logger.log(Level.WARNING, "Error occurred while loading level: ", e);
+            Main.logger.log(Level.SEVERE, "Error occurred while loading level: ", e);
+            Main.setDisplayedFrame(new MainMenuFrame());
         }
-        return new LevelData(new ArrayList<>(), new HashMap<>());
+        return new LevelData(new ArrayList<>(), new HashMap<>(), 0);
     }
 
     /**
@@ -121,8 +123,18 @@ public final class ResourceHandler {
         return currentLevel.getEntities();
     }
 
+    /**
+     * @return the initial locations of the ghosts and pacman in the current level
+     */
     public static HashMap<String, Point> getInitialLocations(){
         return currentLevel.getLocations();
+    }
+
+    /**
+     * @return the number of food entities in the current level
+     */
+    public static int getFoodCount() {
+        return currentLevel.getFoodCount();
     }
 
     /**
@@ -137,6 +149,7 @@ public final class ResourceHandler {
         try {
             pacFont = Font.createFont(Font.TRUETYPE_FONT, new File("res/fonts/emulogic.ttf")).deriveFont(FONT_SIZE);
         } catch (IOException | FontFormatException e) {
+            pacFont = new Font("Arial", Font.PLAIN, 12);
             Main.logger.log(Level.WARNING, "Could not load custom font!", e);
         }
     }

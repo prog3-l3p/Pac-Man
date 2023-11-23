@@ -7,10 +7,14 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import static utility.GameConstants.CELL_SIZE;
 /**
- *
+ * This class is responsible for everything concerning the entity chooser panel.
  */
 public class EntityChooserPanel extends JPanel {
     static JLabel currentEntityPanel = new JLabel();
+
+    /**
+     * Constructor for the entity chooser panel
+     */
     public EntityChooserPanel(){
         setLayout(new FlowLayout());
         createMenu();

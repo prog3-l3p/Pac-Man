@@ -18,6 +18,12 @@ public abstract class Entity implements Serializable {
     protected boolean traversableByPacMan = true;
     protected boolean traversableByGhosts = true;
     protected transient EntityObserver observer;
+
+    /**
+     * Constructor for the entity.
+     * @param x The x coordinate of the entity.
+     * @param y The y coordinate of the entity.
+     */
     protected Entity(int x, int y){
         this.x = x;
         this.y = y;
@@ -61,6 +67,11 @@ public abstract class Entity implements Serializable {
      * @return The sprite of the entity.
      */
     public abstract BufferedImage getSprite();
+
+    /**
+     * Sets the sprite of the entity.
+     * @param spriteName The name of the sprite.
+     */
     public void setSprite(String spriteName){
         this.spriteName = spriteName;
     }
@@ -112,6 +123,10 @@ public abstract class Entity implements Serializable {
     public void move() {
     }
 
+    /**
+     * Adds an observer to the entity.
+     * @param observer The observer to be added.
+     */
     public void addObserver(EntityObserver observer) {
         this.observer = observer;
     }

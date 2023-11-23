@@ -2,6 +2,9 @@ package gamelogic.entities.moving;
 
 import gamelogic.entities.Entity;
 
+/**
+ * Abstract class for all moving entities in the game.
+ */
 public abstract class MovingEntity extends Entity {
     protected int speedX;
     protected int speedY;
@@ -16,11 +19,19 @@ public abstract class MovingEntity extends Entity {
     protected static final String DOWN_2 = "down_2";
     protected String currentDirection = NEUTRAL;
 
+    /**
+     * Constructor for the moving entity.
+     * @param x The x coordinate of the entity.
+     * @param y The y coordinate of the entity.
+     */
     protected MovingEntity(int x, int y) {
         super(x, y);
         setSprite(NEUTRAL);
     }
 
+    /**
+     * Sets the sprite to the next one in the animation.
+     */
     protected void getNextAnimation() {
         switch(currentDirection){
             case "left" -> {

@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * The main window of the application.
+ * The visual representation of the main menu.
  */
 public class MainMenuPanel extends JPanel {
     private JButton levelEditorButton;

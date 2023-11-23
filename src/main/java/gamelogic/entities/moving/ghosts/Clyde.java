@@ -5,28 +5,42 @@ import utility.ShortestPathFinder;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-
+/**
+ * This class represents Clyde
+ */
 public class Clyde extends Ghost {
+    /**
+     * Constructor for Clyde
+     * @param x x-coordinate
+     * @param y y-coordinate
+     */
     public Clyde(int x, int y) {
         super(x, y);
         setSprite(RIGHT_1);
     }
 
+    /**
+     * Gets the sprite for Clyde
+     * @return current sprite
+     */
     @Override
     public BufferedImage getSprite() {
         getNextAnimation();
+        // If Clyde is frightened, return the frightened sprite
         if (isFrightened) {
             return ResourceHandler.getSpriteMap("frightened").get(spriteName);
+        // If Clyde is dead, return the dead sprite
+        } else if (isDead) {
+            return ResourceHandler.getSpriteMap("dead").get(spriteName);
+        // Otherwise, return the normal sprite
+        } else {
+            return ResourceHandler.getSpriteMap("clyde").get(spriteName);
         }
-        return ResourceHandler.getSpriteMap("clyde").get(spriteName);
     }
 
-    @Override
-    public boolean isTraversableByPacMan() {
-        return true;
-    }
-
+    /**
+     * Moves Clyde
+     */
     @Override
     public void move() {
         Point ghostLocation = new Point(getX(), getY());
@@ -34,15 +48,17 @@ public class Clyde extends Ghost {
         double distanceToPacMan = ghostLocation.distance(pacManLocation);
 
         Point targetLocation;
+        // If Clyde is more than 8 cells away from PacMan, target PacMan
         if (distanceToPacMan > 8 && !isFrightened) {
             targetLocation = pacManLocation;
+        // Otherwise, target the bottom left corner
         } else {
-            // Target is the fixed tile outside the bottom-left corner of the maze
             targetLocation = new Point(1, 29);
         }
 
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, targetLocation);
 
+        // Calculate direction
         int xDiff = nextCell.x - getX();
         int yDiff = nextCell.y - getY();
 
@@ -55,8 +71,10 @@ public class Clyde extends Ghost {
         } else {
             currentDirection = "up";
         }
-
-
+        // If Clyde is dead or should not leave home, move towards his starting location
+        if(isDead || !observer.shouldClydeLeaveHome())
+            nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
+        // Move Clyde
         x = nextCell.x;
         y = nextCell.y;
     }
