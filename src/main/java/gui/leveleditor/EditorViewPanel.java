@@ -1,8 +1,5 @@
 package gui.leveleditor;
 
-<<<<<<< Updated upstream
-import gamelogic.nonmoving.Wall;
-=======
 import gamelogic.entities.Entity;
 import gamelogic.entities.moving.ghosts.Blinky;
 import gamelogic.entities.moving.ghosts.Clyde;
@@ -13,76 +10,48 @@ import gamelogic.entities.nonmoving.Wall;
 import gamelogic.entities.moving.PacMan;
 import gamelogic.LevelData;
 import utility.ResourceHandler;
->>>>>>> Stashed changes
+
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-<<<<<<< Updated upstream
-=======
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static utility.GameConstants.*;
 
->>>>>>> Stashed changes
 
 /**
- * This class is responsible for displaying the level in the level editor.
- * It is a 31*28 grid of JLabels, each of which can be clicked to change the wall sprite.
- * The level is represented by a 2D array of Wall objects.
- * The level can be saved to a file and loaded from a file.
+ *
+ * This class is responsible for the visual representation of the level editor
  */
 public class EditorViewPanel extends JPanel {
-<<<<<<< Updated upstream
-    private final Wall[][] walls = new Wall[31][28];
-    private final JLabel[][] wallCells = new JLabel[31][28];
-=======
     private final ArrayList<ArrayList<Entity>> entities = new ArrayList<>();
     private final ArrayList<ArrayList<JLabel>> cells = new ArrayList<>();
     private HashMap<String, Point> locations = new HashMap<>();
+
     private boolean pacManPlaced = false;
     private boolean inkyPlaced = false;
     private boolean blinkyPlaced = false;
     private boolean pinkyPlaced = false;
     private boolean clydePlaced = false;
->>>>>>> Stashed changes
-
-    // Initialize the level editor view panel
+    
+    /**
+     * Constructor for the level editor view panel
+     */
     public EditorViewPanel(){
-        initWalls();
+        initEntities();
         initCells();
-        setLayout(new GridLayout(31, 28));
+        setLayout(new GridLayout(ROW_COUNT, COLUMN_COUNT));
         setBackground(Color.BLACK);
     }
-    // Initialize the cells of the level editor view panel
+
+    /**
+     * Initialize the JLabels that represent the cells of the level editor view panel
+     */
     private void initCells(){
-<<<<<<< Updated upstream
-        // Create 28*31 cells for the level
-        for(int i = 0; i < 31; i++){
-            for(int j = 0; j < 28; j++){
-                wallCells[i][j] = new JLabel();
-                wallCells[i][j].setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
-                wallCells[i][j].setPreferredSize(new Dimension(22,22));
-                wallCells[i][j].setMinimumSize(new Dimension(22,22));
-                wallCells[i][j].setMaximumSize(new Dimension(22,22));
-                int finalI = i;
-                int finalJ = j;
-                wallCells[i][j].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        int col = wallCells[finalI][finalJ].getX() / wallCells[finalI][finalJ].getWidth();
-                        int row = wallCells[finalI][finalJ].getY() / wallCells[finalI][finalJ].getWidth();
-                        if(LevelEditorFrame.getCurrentWallSprite() != null){
-                            walls[row][col].setSprite(LevelEditorFrame.getCurrentWallSprite());
-                            wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
-                        }
-                    }
-                });
-                add(wallCells[i][j]);
-=======
         Dimension cellSize = new Dimension(CELL_SIZE,CELL_SIZE);
         // Create a 31row*28column grid of JLabels
         for(int y = 0; y < ROW_COUNT; y++){
@@ -202,38 +171,26 @@ public class EditorViewPanel extends JPanel {
                     }
                 }
                 entities.get(finalY).set(finalX, editedEntity);
->>>>>>> Stashed changes
-            }
-        }
     }
-    // Initialize the walls of the level editor view panel
-    private void initWalls(){
-        for(int row = 0; row < 31; row++){
-            for(int col = 0; col < 28; col++){
-                walls[row][col] = new Wall(row * 22 , col * 22);
+
+    /**
+     * Initializes the entity list with food entities
+     */
+    private void initEntities(){
+        for(int y = 0; y < ROW_COUNT; y++){
+            entities.add(new ArrayList<>());
+            for(int x = 0; x < COLUMN_COUNT; x++){
+                entities.get(y).add(new Food(x, y));
             }
         }
     }
 
-<<<<<<< Updated upstream
-    // Getters and setters
-    public Wall[][] getWalls(){
-        return walls;
-    }
-
-    public void setWalls(Wall[][] walls){
-        for(int row = 0; row < 31; row++){
-            for(int col = 0; col < 28; col++){
-                this.walls[row][col] = walls[row][col];
-                this.wallCells[row][col].setIcon(new ImageIcon(walls[row][col].getCurrentSprite()));
-=======
     /**
      * @return an ArrayList of ArrayLists of entities
      */
     public LevelData getLevelData(){
         return new LevelData(entities, locations);
     }
-
     /**
      * Loads the level into the level editor
      * @param entities the entities to be loaded
@@ -257,7 +214,6 @@ public class EditorViewPanel extends JPanel {
                 } else {
                     cells.get(y).get(x).setIcon(new ImageIcon(entitySprite));
                 }
->>>>>>> Stashed changes
             }
         }
     }

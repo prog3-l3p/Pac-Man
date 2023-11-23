@@ -1,6 +1,6 @@
 package gui.mainmenu;
 
-import resourcehandler.ResourceHandler;
+import utility.ResourceHandler;
 
 import javax.swing.*;
 
@@ -10,7 +10,9 @@ import javax.swing.*;
 public class MainMenuFrame extends JFrame {
     public MainMenuFrame() {
         super("Pac-Man");
-        setIconImage(ResourceHandler.getSprites().get("GameWindowIcon.png"));
+        setIconImage(ResourceHandler.getIcon("GameWindowIcon"));
+        setResizable(false);
+        setLocationRelativeTo(null);
         add(new MainMenuPanel());
         pack();
     }

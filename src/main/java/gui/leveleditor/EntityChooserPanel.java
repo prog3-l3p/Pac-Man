@@ -5,9 +5,7 @@ import utility.ResourceHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 import static utility.GameConstants.CELL_SIZE;
-
 /**
  *
  */
