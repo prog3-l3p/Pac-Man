@@ -1,6 +1,10 @@
 package gui.leveleditor;
 
+<<<<<<< Updated upstream
 import gamelogic.nonmoving.Wall;
+=======
+import gamelogic.LevelData;
+>>>>>>> Stashed changes
 import gui.Main;
 import resourcehandler.ResourceHandler;
 
@@ -67,10 +71,17 @@ public class LevelEditorFrame extends JFrame {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             switch (title) {
+<<<<<<< Updated upstream
                 case SAVE_LEVEL -> ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getWalls());
                 case LOAD_LEVEL -> {
                     Wall[][] level = ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
                     viewPanel.setWalls(level);
+=======
+                case SAVE_LEVEL -> ResourceHandler.saveLevel(selectedFile.getAbsolutePath(), viewPanel.getLevelData());
+                case LOAD_LEVEL -> {
+                    LevelData level =  ResourceHandler.loadLevel(selectedFile.getAbsolutePath());
+                    viewPanel.loadEntities(level.getEntities(), level.getLocations());
+>>>>>>> Stashed changes
                 }
                 default -> Main.logger.log(Level.WARNING, "Unexpected error while performing file operation.");
             }

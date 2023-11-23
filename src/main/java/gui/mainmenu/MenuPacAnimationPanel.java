@@ -1,6 +1,12 @@
 package gui.mainmenu;
 
+<<<<<<< Updated upstream
 import gamelogic.pacman.PacMan;
+=======
+import gamelogic.entities.Entity;
+import gamelogic.entities.nonmoving.Food;
+import gamelogic.entities.moving.PacMan;
+>>>>>>> Stashed changes
 
 import javax.swing.*;
 import java.awt.*;
