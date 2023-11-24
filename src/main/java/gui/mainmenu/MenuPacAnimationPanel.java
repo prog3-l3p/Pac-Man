@@ -16,7 +16,13 @@ import static utility.GameConstants.TIMER_DELAY;
  * This class is responsible for the Pac-Man animation in the main menu.
  */
 public class MenuPacAnimationPanel extends JPanel {
+    /**
+     * Stores the PacMan entity
+     */
     private final PacMan pacMan = new PacMan(0, 0);
+    /**
+     * Stores the food entities
+     */
     ArrayList<Entity> foods = new ArrayList<>();
 
     /**

@@ -23,12 +23,33 @@ import static utility.GameConstants.*;
  * This class is responsible for the visual representation of the game.
  */
 public class GamePanel extends JPanel {
+    /**
+     * Stores the PacMan entity
+     */
     private PacMan pacMan;
+    /**
+     * Stores the ghosts
+     */
     private final ArrayList<Ghost> ghosts = new ArrayList<>();
+    /**
+     * Stores the level
+     */
     private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+    /**
+     * Stores the locations of the ghosts and PacMan
+     */
     private final HashMap<String, Point> locations = ResourceHandler.getInitialLocations();
+    /**
+     * Stores the observer
+     */
     private final transient EntityObserver observer = new EntityObserver();
+    /**
+     * Stores the timer
+     */
     Timer timer;
+    /**
+     * Stores the score label
+     */
     JLabel scoreLabel;
 
     /**
@@ -45,6 +66,7 @@ public class GamePanel extends JPanel {
                 repaint();
                 if (pacMan.isDead()) {
                     JOptionPane.showMessageDialog(GamePanel.this, "You died! Your score was: " + observer.getScore());
+                    ResourceHandler.resetLevel();
                     Main.setDisplayedFrame(new MainMenuFrame());
                     ((Timer) e.getSource()).stop();
                 } else if (observer.getFoodCount() == 0) {
@@ -53,10 +75,10 @@ public class GamePanel extends JPanel {
                     ((Timer) e.getSource()).stop();
                 } else {
                     scoreLabel.setText("Score: " + observer.getScore());
-                    pacMan.move();
                     for (Ghost ghost : ghosts) {
-                        ghost.move();
+                        ghost.update();
                     }
+                    pacMan.update();
                 }
             }
         });

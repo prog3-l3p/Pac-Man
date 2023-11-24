@@ -18,11 +18,29 @@ import java.util.logging.Level;
  * It also contains a save button and a load button.
  */
 public class LevelEditorFrame extends JFrame {
+    /**
+     * Stores the EntityChooserPanel
+     */
     EntityChooserPanel entityChooserPanel = new EntityChooserPanel();
+    /**
+     * Stores the EditorViewPanel
+     */
     EditorViewPanel viewPanel = new EditorViewPanel();
+    /**
+     * Stores the current sprite that is selected in the level editor
+     */
     private static String currentSprite;
+    /**
+     * Stores the current entity type that is selected in the level editor
+     */
     private static String currentEntityType;
+    /**
+     * Constant for the save level dialog
+     */
     private static final String SAVE_LEVEL = "Save Level";
+    /**
+     * Constant for the load level dialog
+     */
     private static final String LOAD_LEVEL = "Load Level";
 
     /**

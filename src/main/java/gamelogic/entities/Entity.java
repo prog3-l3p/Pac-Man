@@ -12,11 +12,29 @@ import java.io.Serializable;
  * Entities are objects that are drawn on the screen and can be interacted with.
  */
 public abstract class Entity implements Serializable {
+    /**
+     * Stores the x coordinate of the entity.
+     */
     protected int x;
+    /**
+     * Stores the y coordinate of the entity.
+     */
     protected int y;
+    /**
+     * Stores the name of the sprite of the entity.
+     */
     protected String spriteName;
+    /**
+     * Stores whether the entity is traversable by PacMan.
+     */
     protected boolean traversableByPacMan = true;
+    /**
+     * Stores whether the entity is traversable by ghosts.
+     */
     protected boolean traversableByGhosts = true;
+    /**
+     * Stores the observer of the entity.
+     */
     protected transient EntityObserver observer;
 
     /**
@@ -113,6 +131,7 @@ public abstract class Entity implements Serializable {
 
     /**
      * Called when the entity is eaten by PacMan.
+     * @param pacMan PacMan
      */
     public void eatenBy(PacMan pacMan) {
     }
@@ -120,7 +139,7 @@ public abstract class Entity implements Serializable {
     /**
      * Moves the entity.
      */
-    public void move() {
+    public void update() {
     }
 
     /**

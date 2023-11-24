@@ -11,9 +11,17 @@ import java.util.HashMap;
  * This class is used to store a level's data
  */
 public class LevelData implements Serializable {
+    /**
+     * Stores the entities in the level
+     */
     private final ArrayList<ArrayList<Entity>> entities;
+    /**
+     * Stores the locations of the ghosts and PacMan
+     */
     private final HashMap<String, Point> locations;
-
+    /**
+     * Stores the number of food in the level
+     */
     private int foodCount = 0;
 
     /**

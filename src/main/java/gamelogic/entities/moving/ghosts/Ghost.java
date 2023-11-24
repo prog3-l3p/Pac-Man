@@ -12,18 +12,47 @@ import static utility.GameConstants.TIMER_DELAY;
  * This class represents an abstract ghost
  */
 public abstract class Ghost extends MovingEntity {
+    /**
+     * The starting location of the ghost
+     */
     Point startingLocation;
+    /**
+     * True if the ghost is frightened, false otherwise
+     */
     protected boolean isFrightened;
+    /**
+     * True if the ghost is dead, false otherwise
+     */
     protected boolean isDead;
+    /**
+     * The current location of PacMan
+     */
     protected Point pacManLocation;
+    /**
+     * The current direction of PacMan
+     */
     protected String pacManDirection;
+    /**
+     * The number of frames the ghost is dead for
+     */
     protected int deathTimer;
+
+    /**
+     * Constructor for the ghost
+     * @param x x-coordinate
+     * @param y y-coordinate
+     */
     protected Ghost(int x, int y) {
         super(x, y);
         startingLocation = new Point(x, y);
         // Ghosts should be able to traverse through each other
         traversableByGhosts = true;
     }
+
+    /**
+     * Gets the sprite of the ghost
+     * @return the sprite of the ghost
+     */
     public abstract BufferedImage getSprite();
 
     /**

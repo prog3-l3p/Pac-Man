@@ -5,6 +5,9 @@ import gamelogic.entities.Entity;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * This class is used to find the shortest path between two points
+ */
 public final class ShortestPathFinder {
 
     /**

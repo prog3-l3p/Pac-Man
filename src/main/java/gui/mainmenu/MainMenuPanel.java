@@ -12,10 +12,22 @@ import java.awt.*;
  * The visual representation of the main menu.
  */
 public class MainMenuPanel extends JPanel {
+    /**
+     * Stores the button that allows the user to enter the level editor
+     */
     private JButton levelEditorButton;
+    /**
+     * Stores the button that allows the user to play the game
+     */
     private JButton gameButton;
-
+    /**
+     * Stores the font size
+     */
     private static final float FONT_SIZE = 12F;
+
+    /**
+     * Constructor
+     */
     public MainMenuPanel() {
         setLayout(new BorderLayout());
 

@@ -9,6 +9,11 @@ import java.awt.image.BufferedImage;
  * This class represents a food entity
  */
 public class Food extends Entity {
+    /**
+     * Constructor for the food entity
+     * @param x The x coordinate of the food entity
+     * @param y The y coordinate of the food entity
+     */
     public Food(int x, int y){
         super(x ,y);
         setSprite("food");

@@ -8,6 +8,9 @@ import javax.swing.*;
  * The main window of the application.
  */
 public class MainMenuFrame extends JFrame {
+    /**
+     * Constructor
+     */
     public MainMenuFrame() {
         super("Pac-Man");
         setIconImage(ResourceHandler.getIcon("GameWindowIcon"));

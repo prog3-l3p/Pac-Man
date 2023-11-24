@@ -28,13 +28,37 @@ import static utility.GameConstants.*;
  * This class is responsible for the visual representation and logic of the level editor
  */
 public class EditorViewPanel extends JPanel {
+    /**
+     * Stores the entities in the level editor
+     */
     private final ArrayList<ArrayList<Entity>> entities = new ArrayList<>();
+    /**
+     * Stores the cells in the level editor
+     */
     private final ArrayList<ArrayList<JLabel>> cells = new ArrayList<>();
+    /**
+     * Stores the locations of the ghosts and PacMan
+     */
     private HashMap<String, Point> locations = new HashMap<>();
+    /**
+     * Stores whether PacMan has been placed
+     */
     private boolean pacManPlaced = false;
+    /**
+     * Stores whether Inky has been placed
+     */
     private boolean inkyPlaced = false;
+    /**
+     * Stores whether Blinky has been placed
+     */
     private boolean blinkyPlaced = false;
+    /**
+     * Stores whether Pinky has been placed
+     */
     private boolean pinkyPlaced = false;
+    /**
+     * Stores whether Clyde has been placed
+     */
     private boolean clydePlaced = false;
     
     /**
@@ -203,6 +227,7 @@ public class EditorViewPanel extends JPanel {
     /**
      * Loads the level into the level editor
      * @param entities the entities to be loaded
+     * @param locations the locations of the ghosts and PacMan
      */
     public void loadEntities(ArrayList<ArrayList<Entity>> entities, HashMap<String, Point> locations) {
         this.locations = locations;

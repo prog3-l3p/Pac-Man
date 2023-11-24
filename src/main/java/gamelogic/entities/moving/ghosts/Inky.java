@@ -15,6 +15,9 @@ import static utility.GameConstants.ROW_COUNT;
  * This class represents Inky
  */
 public class Inky extends Ghost {
+    /**
+     * The Blinky entity observed by Inky
+     */
     private Blinky observedBlinky;
 
     /**
@@ -29,7 +32,7 @@ public class Inky extends Ghost {
 
     /**
      * Gets the sprite for Inky
-     * @return
+     * @return the sprite for Inky
      */
     @Override
     public BufferedImage getSprite() {
@@ -50,7 +53,7 @@ public class Inky extends Ghost {
      * Moves Inky
      */
     @Override
-    public void move() {
+    public void update() {
         // Get Inky's target location
         final Point target = getTarget();
 
@@ -77,10 +80,10 @@ public class Inky extends Ghost {
             currentDirection = "up";
         }
 
-        // If frightened, move towards the bottom right corner
+        // If frightened, update towards the bottom right corner
         if(isFrightened)
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, new Point(26, 29));
-        // If not supposed to leave home or dead, move towards the starting location
+        // If not supposed to leave home or dead, update towards the starting location
         if(isDead || !observer.shouldInkyLeaveHome()){
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
         }
@@ -95,6 +98,8 @@ public class Inky extends Ghost {
      */
     private Point getTarget() {
         // get the cell two steps ahead of PacMan
+        if(pacManLocation == null)
+            return new Point(0, 0);
         Point pacManPlusTwo = switch (pacManDirection){
             case "up" -> new Point(pacManLocation.x, pacManLocation.y - 2);
             case "left" -> new Point(pacManLocation.x - 2, pacManLocation.y);
@@ -150,7 +155,7 @@ public class Inky extends Ghost {
             return;
         }
         while(!level.get(ambushLocation.y).get(ambushLocation.x).isTraversableByGhosts() && iterations < maxIterations) {
-            // If the current location is not traversable, move the ambush location one step towards the ghost
+            // If the current location is not traversable, update the ambush location one step towards the ghost
             if (ambushLocation.x < getX())
                 ambushLocation.x += 1;
             else if (ambushLocation.x > getX())

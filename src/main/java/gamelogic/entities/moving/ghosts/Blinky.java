@@ -48,7 +48,7 @@ public class Blinky extends Ghost{
      * Moves Blinky
      */
     @Override
-    public void move(){
+    public void update(){
         Point ghostLocation = new Point(getX(), getY());
         // Get the second step on the shortest path
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, pacManLocation);
@@ -67,11 +67,11 @@ public class Blinky extends Ghost{
             currentDirection = "up";
         }
 
-        // If Blinky is frightened, move towards the top right corner
+        // If Blinky is frightened, update towards the top right corner
         if(isFrightened){
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, new Point(26, 1));
         }
-        // If Blinky is dead, move towards the starting location
+        // If Blinky is dead, update towards the starting location
         if(isDead) {
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
         }

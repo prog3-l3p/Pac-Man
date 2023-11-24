@@ -120,7 +120,13 @@ public final class ResourceHandler {
      * @return the current level
      */
     public static ArrayList<ArrayList<Entity>> getCurrentLevel(){
-        return currentLevel.getEntities();
+       if(currentLevel != null)
+            return currentLevel.getEntities();
+       return null;
+    }
+
+    public static void setCurrentLevel(LevelData levelData) {
+        currentLevel = levelData;
     }
 
     /**
@@ -183,4 +189,7 @@ public final class ResourceHandler {
         }
     }
 
+    public static void resetLevel() {
+        currentLevel = null;
+    }
 }

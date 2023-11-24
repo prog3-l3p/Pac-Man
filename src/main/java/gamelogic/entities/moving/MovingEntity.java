@@ -6,17 +6,53 @@ import gamelogic.entities.Entity;
  * Abstract class for all moving entities in the game.
  */
 public abstract class MovingEntity extends Entity {
+    /**
+     * Stores the speed on the x axis of the entity.
+     */
     protected int speedX;
+    /**
+     * Stores the speed on the y axis of the entity.
+     */
     protected int speedY;
+    /**
+     * Sprite constant.
+     */
     protected static final String NEUTRAL = "neutral";
+    /**
+     * Sprite constant.
+     */
     protected static final String LEFT_1 = "left_1";
+    /**
+     * Sprite constant.
+     */
     protected static final String LEFT_2 = "left_2";
+    /**
+     * Sprite constant.
+     */
     protected static final String RIGHT_1 = "right_1";
+    /**
+     * Sprite constant.
+     */
     protected static final String RIGHT_2 = "right_2";
+    /**
+     * Sprite constant.
+     */
     protected static final String UP_1 = "up_1";
+    /**
+     * Sprite constant.
+     */
     protected static final String UP_2 = "up_2";
+    /**
+     * Sprite constant.
+     */
     protected static final String DOWN_1 = "down_1";
+    /**
+     * Sprite constant.
+     */
     protected static final String DOWN_2 = "down_2";
+    /**
+     * Stores the current direction of the entity.
+     */
     protected String currentDirection = NEUTRAL;
 
     /**

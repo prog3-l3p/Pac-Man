@@ -45,10 +45,14 @@ public class Pinky extends Ghost  {
     }
 
     @Override
-    public void move(){
+    public void update(){
         Point ghostLocation = new Point(getX(), getY());
         Point ambushLocation;
 
+        // Handle game start edge case
+        if(pacManLocation == null) {
+            return;
+        }
         // If PacMan is moving towards Pinky, target the tile behind Pinky
         if (isPacManMovingTowardsPinky()) {
             ambushLocation = getTileBehindPinky();
@@ -85,10 +89,10 @@ public class Pinky extends Ghost  {
             currentDirection = "up";
         }
 
-        // If Pinky is frightened, move towards the top left corner
+        // If Pinky is frightened, update towards the top left corner
         if(isFrightened)
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, new Point(1, 1));
-        // If Pinky is dead, move towards the starting location
+        // If Pinky is dead, update towards the starting location
         if(isDead)
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
 
@@ -131,7 +135,7 @@ public class Pinky extends Ghost  {
             return;
         }
         while(!level.get(ambushLocation.y).get(ambushLocation.x).isTraversableByGhosts() && iterations < maxIterations) {
-            // If the current location is not traversable, move the ambush location one step towards the ghost
+            // If the current location is not traversable, update the ambush location one step towards the ghost
             if (ambushLocation.x < getX())
                 ambushLocation.x += 1;
             else if (ambushLocation.x > getX())

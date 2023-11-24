@@ -9,17 +9,27 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import static utility.GameConstants.TIMER_DELAY;
+import static utility.GameConstants.*;
 
 /**
  * This class represents the PacMan entity
  */
 public class PacMan extends MovingEntity {
+    /**
+     * Stores the observers of PacMan
+     */
     private final ArrayList<Ghost> observers = new ArrayList<>();
-    private static final int COLUMN_COUNT = 28;
-    private static final int ROW_COUNT = 31;
+    /**
+     * Stores whether PacMan can eat ghosts or not
+     */
     private boolean canEatGhosts;
+    /**
+     * Stores the number of frames PacMan can eat ghosts for
+     */
     private int ghostEatingTimer = 0;
+    /**
+     * Stores whether PacMan is dead or not
+     */
     private boolean dead;
 
     /**
@@ -33,24 +43,15 @@ public class PacMan extends MovingEntity {
     }
 
     /**
-     * Moves PacMan in the direction he is currently facing.
-     * If PacMan is at the edge of the map (left or right side), he will wrap around to the other side.
-     * If PacMan is facing a wall, he will not move.
-     * If PacMan is facing food, he will eat it.
+     * Updates PacMan's location and checks if he is facing a ghost or not
+     * If he is, he either eats the ghost or dies
+     * If he is facing a cell that is traversable, he moves to that cell
      */
     @Override
-    public void move(){
-        // Wrap around
-        if(x <= 0) {x += COLUMN_COUNT;}
-        if(y <= 0) {y += ROW_COUNT;}
-        // Check if PacMan is facing a cell that is traversable
-        Entity e = ResourceHandler.getCurrentLevel().get((y + speedY) % ROW_COUNT).get((x + speedX) % COLUMN_COUNT);
-        if(e.isTraversableByPacMan()) {
-            x = (x + speedX) % COLUMN_COUNT;
-            y = (y + speedY) % ROW_COUNT;
-        }
-        // Try to eat the entity
-        e.eatenBy(this);
+    public void update(){
+        ghostEatingTimer--;
+        if(ghostEatingTimer == 0)
+            canEatGhosts = false;
         // Check if PacMan is facing a ghost
         for(Ghost g : observers){
             if(g.getX() == x && g.getY() == y){
@@ -61,9 +62,17 @@ public class PacMan extends MovingEntity {
                 }
             }
         }
-        ghostEatingTimer--;
-        if(ghostEatingTimer == 0)
-            canEatGhosts = false;
+        // Check if PacMan is facing a cell that is traversable
+        Entity e = ResourceHandler.getCurrentLevel().get((y + speedY) % ROW_COUNT).get((x + speedX) % COLUMN_COUNT);
+        // Try to eat the entity
+        if(e.isTraversableByPacMan()) {
+            x = (x + speedX) % COLUMN_COUNT;
+            y = (y + speedY) % ROW_COUNT;
+        }
+        e.eatenBy(this);
+        // Wrap around
+        if(x <= 0) {x += COLUMN_COUNT;}
+        if(y <= 0) {y += ROW_COUNT;}
         notifyObservers();
     }
 

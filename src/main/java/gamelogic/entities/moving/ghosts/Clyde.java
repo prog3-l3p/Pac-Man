@@ -42,9 +42,13 @@ public class Clyde extends Ghost {
      * Moves Clyde
      */
     @Override
-    public void move() {
+    public void update() {
         Point ghostLocation = new Point(getX(), getY());
 
+        // Handle game start edge case
+        if(pacManLocation == null) {
+            return;
+        }
         double distanceToPacMan = ghostLocation.distance(pacManLocation);
 
         Point targetLocation;
@@ -71,7 +75,7 @@ public class Clyde extends Ghost {
         } else {
             currentDirection = "up";
         }
-        // If Clyde is dead or should not leave home, move towards his starting location
+        // If Clyde is dead or should not leave home, update towards his starting location
         if(isDead || !observer.shouldClydeLeaveHome())
             nextCell = ShortestPathFinder.findNextCellForShortestPath(ghostLocation, startingLocation);
         // Move Clyde
