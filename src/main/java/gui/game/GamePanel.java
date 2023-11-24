@@ -10,8 +10,6 @@ import utility.ResourceHandler;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -34,7 +32,7 @@ public class GamePanel extends JPanel {
     /**
      * Stores the level
      */
-    private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+    private final ArrayList<ArrayList<Entity>> level = ResourceHandler.getLevelEntities();
     /**
      * Stores the locations of the ghosts and PacMan
      */
@@ -60,43 +58,37 @@ public class GamePanel extends JPanel {
         createScoreLabel();
         initEntities();
         addObservers();
-        timer = new Timer(TIMER_DELAY, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                repaint();
-                if (pacMan.isDead()) {
-                    JOptionPane.showMessageDialog(GamePanel.this, "You died! Your score was: " + observer.getScore());
-                    ResourceHandler.resetLevel();
-                    Main.setDisplayedFrame(new MainMenuFrame());
-                    ((Timer) e.getSource()).stop();
-                } else if (observer.getFoodCount() == 0) {
-                    JOptionPane.showMessageDialog(GamePanel.this, "You won! Your score was: " + observer.getScore());
-                    Main.setDisplayedFrame(new MainMenuFrame());
-                    ((Timer) e.getSource()).stop();
-                } else {
-                    scoreLabel.setText("Score: " + observer.getScore());
-                    for (Ghost ghost : ghosts) {
-                        ghost.update();
-                    }
-                    pacMan.update();
+        timer = new Timer(TIMER_DELAY, e -> {
+            repaint();
+            if (pacMan.isDead()) {
+                JOptionPane.showMessageDialog(GamePanel.this, "You died! Your score was: " + observer.getScore());
+                ResourceHandler.resetLevel();
+                Main.setDisplayedFrame(new MainMenuFrame());
+                ((Timer) e.getSource()).stop();
+            } else if (observer.getFoodCount() == 0) {
+                JOptionPane.showMessageDialog(GamePanel.this, "You won! Your score was: " + observer.getScore());
+                Main.setDisplayedFrame(new MainMenuFrame());
+                ((Timer) e.getSource()).stop();
+            } else {
+                scoreLabel.setText("Score: " + observer.getScore());
+                for (Ghost ghost : ghosts) {
+                    ghost.update();
                 }
+                pacMan.update();
             }
         });
-        timer.start();
 
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 pacMan.keyPressed(e);
+                if(!timer.isRunning()){
+                    timer.start();
+                    scoreLabel.setText("Score: " + observer.getScore());
+                }
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    if(timer.isRunning()){
                         timer.stop();
                         scoreLabel.setText("PAUSED");
-                    }
-                    else{
-                        timer.start();
-                        scoreLabel.setText("Score: " + observer.getScore());
-                    }
                 }
             }
         });

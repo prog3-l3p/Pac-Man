@@ -120,7 +120,7 @@ public class Pinky extends Ghost  {
      * @param ambushLocation the ambush location
      */
     private void traverseCheckAmbushLocation(Point ambushLocation){
-        ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+        ArrayList<ArrayList<Entity>> level = ResourceHandler.getLevelEntities();
 
         // Needed to prevent infinite loop
         int maxIterations = ROW_COUNT * COLUMN_COUNT;

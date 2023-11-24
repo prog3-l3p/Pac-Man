@@ -39,7 +39,7 @@ public class PacMan extends MovingEntity {
      */
     public PacMan(int x, int y) {
         super(x ,y);
-        currentDirection = "right";
+        currentDirection = "neutral";
     }
 
     /**
@@ -49,6 +49,7 @@ public class PacMan extends MovingEntity {
      */
     @Override
     public void update(){
+        determineSpeed();
         ghostEatingTimer--;
         if(ghostEatingTimer == 0)
             canEatGhosts = false;
@@ -63,7 +64,7 @@ public class PacMan extends MovingEntity {
             }
         }
         // Check if PacMan is facing a cell that is traversable
-        Entity e = ResourceHandler.getCurrentLevel().get((y + speedY) % ROW_COUNT).get((x + speedX) % COLUMN_COUNT);
+        Entity e = ResourceHandler.getLevelEntities().get((y + speedY) % ROW_COUNT).get((x + speedX) % COLUMN_COUNT);
         // Try to eat the entity
         if(e.isTraversableByPacMan()) {
             x = (x + speedX) % COLUMN_COUNT;
@@ -120,26 +121,36 @@ public class PacMan extends MovingEntity {
      */
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        switch(key){
-            case KeyEvent.VK_LEFT -> {
-                currentDirection = "left";
+        currentDirection = switch(key){
+            case KeyEvent.VK_LEFT -> "left";
+            case KeyEvent.VK_RIGHT -> "right";
+            case KeyEvent.VK_UP -> "up";
+            case KeyEvent.VK_DOWN -> "down";
+            default -> currentDirection;
+        };
+    }
+
+    private void determineSpeed(){
+        switch(currentDirection){
+            case "left" -> {
                 speedX = -1;
                 speedY = 0;
             }
-            case KeyEvent.VK_RIGHT -> {
-                currentDirection = "right";
+            case "right" -> {
                 speedX = 1;
                 speedY = 0;
             }
-            case KeyEvent.VK_UP ->  {
-                currentDirection = "up";
+            case "up" -> {
+                speedX = 0;
                 speedY = -1;
-                speedX = 0;
             }
-            case KeyEvent.VK_DOWN -> {
-                currentDirection = "down";
-                speedY = 1;
+            case "down" -> {
                 speedX = 0;
+                speedY = 1;
+            }
+            default -> {
+                speedX = 0;
+                speedY = 0;
             }
         }
     }
@@ -176,5 +187,6 @@ public class PacMan extends MovingEntity {
             ghost.update(new Point(x, y), currentDirection, canEatGhosts);
         }
     }
+
 
 }

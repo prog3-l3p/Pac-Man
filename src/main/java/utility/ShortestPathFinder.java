@@ -56,7 +56,7 @@ public final class ShortestPathFinder {
      * @return a list of neighbours
      */
     private static LinkedList<Point> getValidNeighbours(Point p){
-        ArrayList<ArrayList<Entity>> level = ResourceHandler.getCurrentLevel();
+        ArrayList<ArrayList<Entity>> level = ResourceHandler.getLevelEntities();
         LinkedList<Point> neighbors = new LinkedList<>();
         if(p.x > 0 &&level.get(p.y).get(p.x - 1).isTraversableByGhosts()){
             neighbors.add(new Point(p.x - 1, p.y));

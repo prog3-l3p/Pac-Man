@@ -119,7 +119,7 @@ public final class ResourceHandler {
     /**
      * @return the current level
      */
-    public static ArrayList<ArrayList<Entity>> getCurrentLevel(){
+    public static ArrayList<ArrayList<Entity>> getLevelEntities(){
        if(currentLevel != null)
             return currentLevel.getEntities();
        return null;
@@ -133,6 +133,8 @@ public final class ResourceHandler {
      * @return the initial locations of the ghosts and pacman in the current level
      */
     public static HashMap<String, Point> getInitialLocations(){
+        if(currentLevel == null)
+            return null;
         return currentLevel.getLocations();
     }
 
@@ -140,6 +142,9 @@ public final class ResourceHandler {
      * @return the number of food entities in the current level
      */
     public static int getFoodCount() {
+        if(currentLevel == null){
+            return 0;
+        }
         return currentLevel.getFoodCount();
     }
 
@@ -191,5 +196,6 @@ public final class ResourceHandler {
 
     public static void resetLevel() {
         currentLevel = null;
+
     }
 }

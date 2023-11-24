@@ -95,7 +95,7 @@ public class MainMenuPanel extends JPanel {
         gameButton.setBorderPainted(false);
         gameButton.addActionListener(e -> {
             ResourceHandler.levelSelectDialog(this);
-            if(ResourceHandler.getCurrentLevel() != null)
+            if(ResourceHandler.getLevelEntities() != null)
                 Main.setDisplayedFrame(new GameFrame());
             else Main.setDisplayedFrame(new MainMenuFrame());
         });
