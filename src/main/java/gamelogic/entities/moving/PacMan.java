@@ -69,8 +69,8 @@ public class PacMan extends MovingEntity {
         if(e.isTraversableByPacMan()) {
             x = (x + speedX) % COLUMN_COUNT;
             y = (y + speedY) % ROW_COUNT;
+            e.eatenBy(this);
         }
-        e.eatenBy(this);
         // Wrap around
         if(x <= 0) {x += COLUMN_COUNT;}
         if(y <= 0) {y += ROW_COUNT;}
