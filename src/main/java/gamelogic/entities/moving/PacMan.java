@@ -53,14 +53,9 @@ public class PacMan extends MovingEntity {
         ghostEatingTimer--;
         if(ghostEatingTimer == 0)
             canEatGhosts = false;
-        // Check if PacMan is facing a ghost
         for(Ghost g : observers){
             if(g.getX() == x && g.getY() == y){
-                if(canEatGhosts){
-                    g.eatenBy(this);
-                } else if (!g.isDead()){
-                    dead = true;
-                }
+                g.eatenBy(this);
             }
         }
         // Check if PacMan is facing a cell that is traversable
@@ -177,6 +172,10 @@ public class PacMan extends MovingEntity {
      */
     public boolean canEatGhosts() {
         return canEatGhosts;
+    }
+
+    public void kill(){
+        dead = true;
     }
 
     /**

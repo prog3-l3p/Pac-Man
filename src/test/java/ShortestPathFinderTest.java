@@ -11,22 +11,22 @@ public class ShortestPathFinderTest {
     @BeforeClass
     public static void setUp(){
         ResourceHandler.init();
-        LevelData levelData = ResourceHandler.loadLevel("src/test/resources/test_level_1");
+        LevelData levelData = ResourceHandler.loadLevel("src/test/resources/testing_level");
         ResourceHandler.setCurrentLevel(levelData);
     }
 
     @Test
     public void testSameStartAndEnd(){
-        Point start = new Point(0,8);
-        Point end = new Point(0,8);
+        Point start = new Point(0,0);
+        Point end = new Point(0,0);
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(start, end);
         assertEquals(start, nextCell);
     }
 
     @Test
     public void testDifferentStartAndEnd(){
-        Point start = new  Point(0,8);
-        Point end = new Point(1, 8);
+        Point start = new  Point(0,0);
+        Point end = new Point(1, 0);
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(start, end);
         assertNotEquals(start, nextCell);
     }
@@ -34,17 +34,17 @@ public class ShortestPathFinderTest {
     @Test
     public void testNoPathBetweenStartAndEnd(){
         Point start = new Point(0,0);
-        Point end = new Point(4,0);
+        Point end = new Point(4,1);
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(start, end);
         assertEquals(start, nextCell);
     }
 
     @Test
     public void testActuallyShortest(){
-        Point start = new Point(0,8);
-        Point end = new Point(4,0);
+        Point start = new Point(0,0);
+        Point end = new Point(6,4);
         Point nextCell = ShortestPathFinder.findNextCellForShortestPath(start, end);
-        Point expected = new Point(1, 8);
+        Point expected = new Point(0, 1);
         assertEquals(expected, nextCell);
     }
 

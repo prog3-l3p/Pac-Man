@@ -80,6 +80,8 @@ public abstract class Ghost extends MovingEntity {
             if (observer != null) {
                 observer.addScore(200);
             }
+        } else if(!isDead) {
+            pacMan.kill();
         }
     }
 

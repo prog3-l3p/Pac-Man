@@ -51,6 +51,7 @@ public class LevelEditorFrame extends JFrame {
         setIconImage(ResourceHandler.getIcon("LevelEditorIcon"));
         setLayout(new BorderLayout());
         setBackground(Color.BLACK);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(entityChooserPanel, BorderLayout.NORTH);
         add(viewPanel, BorderLayout.CENTER);
 

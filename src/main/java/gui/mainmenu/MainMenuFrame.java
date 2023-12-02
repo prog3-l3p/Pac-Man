@@ -16,6 +16,7 @@ public class MainMenuFrame extends JFrame {
         setIconImage(ResourceHandler.getIcon("GameWindowIcon"));
         setResizable(false);
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(new MainMenuPanel());
         pack();
     }

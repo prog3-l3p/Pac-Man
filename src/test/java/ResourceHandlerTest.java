@@ -29,7 +29,7 @@ public class ResourceHandlerTest {
 
     @Test
     public void testLevelLoader() {
-        LevelData levelData = ResourceHandler.loadLevel("src/test/resources/test_level_1");
+        LevelData levelData = ResourceHandler.loadLevel("src/test/resources/testing_level");
         ResourceHandler.setCurrentLevel(levelData);
         assertEquals(levelData.getEntities(), ResourceHandler.getLevelEntities());
         assertEquals(levelData.getLocations(), ResourceHandler.getInitialLocations());

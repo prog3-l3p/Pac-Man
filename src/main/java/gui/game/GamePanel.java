@@ -58,25 +58,7 @@ public class GamePanel extends JPanel {
         createScoreLabel();
         initEntities();
         addObservers();
-        timer = new Timer(TIMER_DELAY, e -> {
-            repaint();
-            if (pacMan.isDead()) {
-                JOptionPane.showMessageDialog(GamePanel.this, "You died! Your score was: " + observer.getScore());
-                ResourceHandler.resetLevel();
-                Main.setDisplayedFrame(new MainMenuFrame());
-                ((Timer) e.getSource()).stop();
-            } else if (observer.getFoodCount() == 0) {
-                JOptionPane.showMessageDialog(GamePanel.this, "You won! Your score was: " + observer.getScore());
-                Main.setDisplayedFrame(new MainMenuFrame());
-                ((Timer) e.getSource()).stop();
-            } else {
-                scoreLabel.setText("Score: " + observer.getScore());
-                for (Ghost ghost : ghosts) {
-                    ghost.update();
-                }
-                pacMan.update();
-            }
-        });
+        timer = new Timer(TIMER_DELAY, e -> doUpdate());
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -167,6 +149,26 @@ public class GamePanel extends JPanel {
             for(Entity e : yAxis){
                 e.addObserver(observer);
             }
+        }
+    }
+
+    private void doUpdate(){
+        repaint();
+        if (pacMan.isDead()) {
+            JOptionPane.showMessageDialog(GamePanel.this, "You died! Your score was: " + observer.getScore());
+            ResourceHandler.resetLevel();
+            Main.setDisplayedFrame(new MainMenuFrame());
+            timer.stop();
+        } else if (observer.getFoodCount() == 0) {
+            JOptionPane.showMessageDialog(GamePanel.this, "You won! Your score was: " + observer.getScore());
+            Main.setDisplayedFrame(new MainMenuFrame());
+            timer.stop();
+        } else {
+            scoreLabel.setText("Score: " + observer.getScore());
+            for (Ghost ghost : ghosts) {
+                ghost.update();
+            }
+            pacMan.update();
         }
     }
 
